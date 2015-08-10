@@ -1,0 +1,42 @@
+auction:
+  charge:
+    chargePercentPerBid: 1
+    # From 0 to 100
+    minimumChargePerBid: 1
+  auctionableItems:
+    - item: '4'
+      startingPrice: 0.98
+      minimumIncrement: 0.01
+      # The minimum price increment for per bid
+      preserveTimeInSeconds: 600
+      # The time for which the item should be in the showcase before bidding for this item is started
+      auctionDurationInSeconds: 300
+      # The time in which the item should be sold after bidding for this item has started
+      
+vault:
+  capacity: 9
+  # Max capacity: 54
+      
+cleaning:
+  active:
+  # Active cleaning means cleaning by this plugin
+    enabled: false
+    # Whether to enable active cleaning
+    auction: true
+    # Whether to enable auction function for items cleaned by active cleaning
+    intervalInSeconds: 600
+    preservedItems:
+      - '2'
+    notify:
+    # Notify players when ___ seconds are left until active cleaning
+      - 300
+      - 60
+      - 30
+      - 10
+  passive:
+  # passive cleaning means cleaning by vanilla Minecraft
+    auction: true
+    # Whether to enable auction function for items cleaned by passive cleaning
+    
+locale: en_UK
+# Locale files included by default: en_UK, zh_CN

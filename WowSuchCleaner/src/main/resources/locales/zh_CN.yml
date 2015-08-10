@@ -1,0 +1,45 @@
+﻿cleaning:
+  preNotify: '&c掉落物将在{time}秒后被清理！'
+  cleanNotify: '&e{count}&c个掉落物已被清理，其中&e{auctionCount}&c个将被拍卖!'
+  
+ui:
+  title: '拍卖品目录(点击可出价)'
+  clickToRefresh: '&r&b刷新'
+  prevPageButton: '&r&b上一页: &a{page}'
+  nextPageButton: '&r&b下一页: &a{page}'
+  currentPage: '&r&b当前页码: &a{page}'
+  currentPrice: '&r&b当前价格: &a{price} {currency}'
+  lastBid: '&r&b最后出价: 玩家: &a{player}&b | 价格增幅: &a{price} {currency}'
+  minimumIncrement: '&r&b最低价格增幅: &a{price} {currency}'
+  bidUnstarted: '&r&a暂无出价'
+  timeRemaining: '&r&b剩余时间: &a{time} 秒'
+  anonymous: '&9[匿名]'
+
+  bidPrompt: "&b直接在聊天框中输入价格来出价，或者输入&acancel&b取消。在价格前加&aa&b可以匿名出价。"
+  chargePerBid: '&b每次出价的手续费是{chargePercent}% ，最低手续费是{minimumCharge} {currency}。'
+  wrongBidFormat: '&c出价格式错误。'
+  bidCancelled: '&c出价已取消。'
+  bidTooLow: '&c最低价格增幅: {minimumIncrement} {currency}'
+  balanceNotEnough: "&c您没有足够的金钱。 您的金钱余额是: {balance} {currency}"
+  sucessfulBid: '&a出价成功。价格增幅: &b{price} {currency}&a | 手续费: &b{charge} {currency}'
+  fullVault: '&c您的保险箱已满。注意：当您为一件拍卖品出价时，它将占用一个位置。'
+  itemAlreadySold: '&c该物品已成交。'
+
+  hammerBuyer: "&a您成功竞拍了一件商品，商品已发送至您的背包或保险柜。"
+  hammerOthers: "&a您竞拍的商品已出售，您的竞拍款已退还到您的账户。"
+
+  vault: 保险柜 - 点击可取出物品
+
+commands:
+  playerNeeded: '&c这个命令必须由玩家执行。'
+  noPermission: '&c权限不足。'
+  auction:
+    help: '&b{usage} - 拍卖您手中的道具。'
+    notAuctionable: '&c您手上的道具无法进行拍卖。'
+    success: '&a您的道具已录入拍卖目录。'
+  showcase:
+    help: '&b{usage} - 打开商品目录。'
+  vault:
+    help: '&b{usage} - 打开您的保险柜。'
+
+# Contributor: Velvit

@@ -1,0 +1,43 @@
+cleaning:
+  preNotify: '&cDropped items will be cleared in &e{time} seconds&c!'
+  cleanNotify: '&e{count}&c dropped items have been be cleared, &e{auctionCount}&c of which are now at auction!'
+  
+ui:
+  title: 'Lot List (Click to bid)'
+  clickToRefresh: '&r&bRefresh'
+  prevPageButton: '&r&bPrev Page: &a{page}'
+  nextPageButton: '&r&bNext Page: &a{page}'
+  currentPage: '&r&bCurrent Page: &a{page}'
+  currentPrice: '&r&bCurrent Price: &a{price} {currency}'
+  lastBid: '&r&bLast bid: By &a{player}&b | Price Increment: &a{price} {currency}'
+  minimumIncrement: '&r&bMinimum Increment: &a{price} {currency}'
+  bidUnstarted: '&r&aNo bid yet'
+  timeRemaining: '&r&bTime remaining in seconds: &a{time}'
+  anonymous: '&9[Anonymous]'
+
+  bidPrompt: "&bBid by entering your bid DIRECTLY in the chat or cancel by entering '&acancel&b'. An '&aa&b' before your bid will result in an anonymous bid."
+  chargePerBid: '&bCharge per bid is {chargePercent}% and the minimum charge is {minimumCharge} {currency}.'
+  wrongBidFormat: '&cWrong bid format.'
+  bidCancelled: '&cBid cancelled.'
+  bidTooLow: '&cMinimum increment for this lot is: {minimumIncrement} {currency}'
+  balanceNotEnough: "&cYou don't have enough money. Your balance is: {balance} {currency}"
+  sucessfulBid: '&aBid successfully. Price Increment: &b{price} {currency}&a | Charge: &b{charge} {currency}'
+  fullVault: '&cYour vault is full. Note that when you bid for an item, it uses a slot.'
+  itemAlreadySold: '&cThis item has been sold.'
+
+  hammerBuyer: "&aAn item you've bid for has become yours. See your inventory or vault."
+  hammerOthers: "&aAn item you've bid for is now sold. Your deposit has been returned to you."
+
+  vault: Vault - Click to withdraw
+
+commands:
+  playerNeeded: '&cThis command must be executed by a player.'
+  noPermission: '&cPermission denied.'
+  auction:
+    help: '&b{usage} - Auction the item in your hand.'
+    notAuctionable: '&cThe item in your hand is not auctionable.'
+    success: '&aYour item is now at auction.'
+  showcase:
+    help: '&b{usage} - Open the lot showcase.'
+  vault:
+    help: '&b{usage} - Open your vault.'
