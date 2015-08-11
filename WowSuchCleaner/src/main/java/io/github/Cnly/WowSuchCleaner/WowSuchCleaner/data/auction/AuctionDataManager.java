@@ -149,7 +149,12 @@ public class AuctionDataManager
         long preserveTimeExpire = lot.getPreserveTimeExpire();
         long auctionDurationExpire = lot.getAuctionDurationExpire();
         
-        ConfigurationSection singleLotSection = data.getConfigurationSection("lots." + uuidString);
+        String sectionPath = "lots." + uuidString;
+        ConfigurationSection singleLotSection = data.getYamlConfig().getConfigurationSection(sectionPath);
+        if(null == singleLotSection)
+        {
+            singleLotSection = data.getYamlConfig().createSection(sectionPath);
+        }
         
         singleLotSection.set("item", item);
         singleLotSection.set("started", started);
@@ -165,8 +170,7 @@ public class AuctionDataManager
     
     private void removeFromBackend(Lot lot)
     {
-        ConfigurationSection lotsSection = data.getConfigurationSection("lots");
-        lotsSection.set(lot.getUuid().toString(), null);
+        data.set("lots." + lot.getUuid().toString(), null);
     }
     
     public boolean isVaultAvailable(Player p)
