@@ -350,7 +350,13 @@ public class AuctionDataManager
                 }
             }
             
-            if(lotsToRemove != null) lots.removeAll(lotsToRemove);
+            if(lotsToRemove != null)
+            {
+                for(Lot lot : lotsToRemove)
+                {
+                    removeLot(lot);
+                }
+            }
             
         }
         
