@@ -97,7 +97,15 @@ public class BidHandler implements Listener
         double charge = bid * (auctionConfig.getChargePercentPerBid() / 100);
         if(charge < auctionConfig.getMinimumChargePerBid()) charge = auctionConfig.getMinimumChargePerBid();
         
-        EconomyResponse er = Main.economy.withdrawPlayer(p, bid + charge);
+        EconomyResponse er = null;
+        if(auctionDataManager.hasBidBefore(p, lot))
+        {
+            er = Main.economy.withdrawPlayer(p, bid + charge);
+        }
+        else
+        {
+            er = Main.economy.withdrawPlayer(p, lot.getPrice() + bid + charge);
+        }
         
         if(!er.transactionSuccess())
         {
@@ -111,19 +119,7 @@ public class BidHandler implements Listener
             return;
         }
         
-        auctionDataManager.occupyVault(p);
-        auctionDataManager.addDeposit(lot, p, bid);
-        
-        if(!lot.isStarted())
-        {
-            lot.setAuctionDurationExpire(lot.getAuctionDurationExpire() + System.currentTimeMillis());
-            lot.setStarted(true);
-        }
-        
-        lot.setLastBidPlayerName(anonymous ? localeManager.getLocalizedString("ui.anonymous") : p.getName());
-        lot.setLastBidPlayerUuid(p.getUniqueId());
-        lot.setLastBidPrice(bid);
-        lot.setPrice(lot.getPrice() + bid);
+        auctionDataManager.bid(p, anonymous, lot, bid);
         
         callback.onBidSuccess(p, bid, anonymous);
         biddingPlayers.remove(uuid);

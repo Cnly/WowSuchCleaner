@@ -134,6 +134,12 @@ public class AuctionDataManager
         }
     }
     
+    public boolean hasBidBefore(Player p, Lot lot)
+    {
+        String depositPath = new StringBuilder(86).append("lots.").append(lot.getUuid()).append(".deposit.").append(p.getUniqueId()).toString();
+        return data.isSet(depositPath);
+    }
+    
     private void saveToBackend(Lot lot)
     {
         
@@ -171,6 +177,32 @@ public class AuctionDataManager
     private void removeFromBackend(Lot lot)
     {
         data.set("lots." + lot.getUuid().toString(), null);
+    }
+    
+    public void bid(Player p, boolean anonymous, Lot lot, double priceIncrement)
+    {
+        
+        if(hasBidBefore(p, lot))
+        {
+            addDeposit(lot, p, priceIncrement);
+        }
+        else
+        {
+            occupyVault(p);
+            addDeposit(lot, p, lot.getPrice() + priceIncrement);
+        }
+        
+        if(!lot.isStarted())
+        {
+            lot.setAuctionDurationExpire(lot.getAuctionDurationExpire() + System.currentTimeMillis());
+            lot.setStarted(true);
+        }
+        
+        lot.setLastBidPlayerName(anonymous ? localeManager.getLocalizedString("ui.anonymous") : p.getName());
+        lot.setLastBidPlayerUuid(p.getUniqueId());
+        lot.setLastBidPrice(priceIncrement);
+        lot.setPrice(lot.getPrice() + priceIncrement);
+        
     }
     
     public boolean isVaultAvailable(Player p)
@@ -253,8 +285,9 @@ public class AuctionDataManager
         {
             unoccupyVault(buyerUuid);
             buyer.getInventory().addItem(lot.getItem());
-            buyer.sendMessage(localeManager.getLocalizedString("ui.hammerBuyer"));
         }
+        
+        if(buyer != null) buyer.sendMessage(localeManager.getLocalizedString("ui.hammerBuyer"));
         
         Map<UUID, Double> deposit = getDeposit(lot);
         deposit.remove(buyerUuid);
