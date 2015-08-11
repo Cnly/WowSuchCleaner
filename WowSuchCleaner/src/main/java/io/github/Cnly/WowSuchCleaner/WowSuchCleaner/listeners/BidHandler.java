@@ -68,12 +68,6 @@ public class BidHandler implements Listener
             msg = msg.substring(1);
         }
         
-        if(!auctionDataManager.isVaultAvailable(p))
-        {
-            p.sendMessage(localeManager.getLocalizedString("ui.fullVault"));
-            return;
-        }
-        
         double bid = 0;
         try
         {
@@ -144,6 +138,12 @@ public class BidHandler implements Listener
         {
             p.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
             p.sendMessage(localeManager.getLocalizedString("ui.bidCancelled"));
+            return;
+        }
+        
+        if(!auctionDataManager.hasBidBefore(p, lot) && !auctionDataManager.isVaultAvailable(p))
+        {
+            p.sendMessage(localeManager.getLocalizedString("ui.fullVault"));
             return;
         }
         
