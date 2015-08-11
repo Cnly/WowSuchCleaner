@@ -81,7 +81,7 @@ public class LotShowcase extends ChestMenu
         
         Collection<Player> result = new HashSet<Player>(opened);
         
-        for(Player p : opened)
+        for(Player p : result)
         {
             p.closeInventory();
         }
