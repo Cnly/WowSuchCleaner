@@ -41,5 +41,8 @@ commands:
     help: '&b{usage} - 打开商品目录。'
   vault:
     help: '&b{usage} - 打开您的保险柜。'
+  reload:
+    help: '&b{usage} - 重载插件。'
+    reloaded: '&a插件已重载。'
 
 # Contributor: Velvit

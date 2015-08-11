@@ -41,3 +41,6 @@ commands:
     help: '&b{usage} - Open the lot showcase.'
   vault:
     help: '&b{usage} - Open your vault.'
+  reload:
+    help: '&b{usage} - Reload the plugin.'
+    reloaded: '&aPlugin reloaded.'
