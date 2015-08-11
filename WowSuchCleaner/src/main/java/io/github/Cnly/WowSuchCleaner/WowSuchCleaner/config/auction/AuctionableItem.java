@@ -44,7 +44,9 @@ public class AuctionableItem
     
     public boolean isTheSameItem(ItemStack item)
     {
-        return this.item.isSimilar(item);
+        if(item.getType() != this.item.getType()) return false;
+        if(item.getDurability() != this.item.getDurability()) return false;
+        return true;
     }
     
     public ItemStack getItem()
