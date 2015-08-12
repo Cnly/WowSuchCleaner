@@ -30,7 +30,9 @@ cleaning:
     auction: true
     # Whether to enable auction function for items cleaned by active cleaning
     intervalInSeconds: 600
+    # The interval in seconds of active cleaning
     preservedItems:
+    # These items are preserved from active cleaning
       - '2'
     notify:
     # Notify players when ___ seconds are left until active cleaning
