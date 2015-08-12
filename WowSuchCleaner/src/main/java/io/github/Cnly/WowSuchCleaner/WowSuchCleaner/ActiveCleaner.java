@@ -45,7 +45,7 @@ public class ActiveCleaner extends BukkitRunnable
                     if(e instanceof Item)
                     {
                         Item item = (Item)e;
-                        if(activeCleaningConfig.getPreservedItems().contains(item.getItemStack())) continue;
+                        if(activeCleaningConfig.isPreservedItem(item.getItemStack())) continue;
                         boolean auction = auctionDataManager.addLot(item.getItemStack());
                         item.remove();
                         count++;

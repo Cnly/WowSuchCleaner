@@ -48,6 +48,20 @@ public class ActiveCleaningConfig
         }
         
     }
+    
+    public boolean isPreservedItem(ItemStack item)
+    {
+        for(ItemStack i : preservedItems)
+        {
+            if(item.getType() != i.getType()) continue;
+            if(i.getType().getMaxDurability() == 0)
+            {
+                if(item.getDurability() != i.getDurability()) continue;
+            }
+            return true;
+        }
+        return false;
+    }
 
     public boolean isEnabled()
     {
