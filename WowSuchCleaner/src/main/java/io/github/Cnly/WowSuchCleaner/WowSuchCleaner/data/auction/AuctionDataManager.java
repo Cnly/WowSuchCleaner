@@ -211,7 +211,7 @@ public class AuctionDataManager
         String vaultPath = new StringBuilder(43).append("vaults.").append(p.getUniqueId()).toString();
         ConfigurationSection singlePlayerVaultSection = data.getConfigurationSection(vaultPath);
         
-        return singlePlayerVaultSection.getInt("itemCount", 0) < auctionConfig.getVaultCapacity();
+        return singlePlayerVaultSection.getInt("itemCount", 0) < auctionConfig.getVaultCapacity(p);
     }
     
     public boolean occupyVault(Player p)
@@ -221,7 +221,7 @@ public class AuctionDataManager
         ConfigurationSection singlePlayerVaultSection = data.getConfigurationSection(vaultPath);
         int itemCount = singlePlayerVaultSection.getInt("itemCount", 0);
         
-        if(itemCount < auctionConfig.getVaultCapacity())
+        if(itemCount < auctionConfig.getVaultCapacity(p))
         {
             singlePlayerVaultSection.set("itemCount", ++itemCount);
             return true;

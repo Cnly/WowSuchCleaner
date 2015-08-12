@@ -14,8 +14,13 @@ auction:
       # The time in which the item should be sold after bidding for this item has started
       
 vault:
-  capacity: 9
-  # Max capacity: 54
+  capacity:
+    defaultCapacity: 9
+    # Max capacity: 54
+    permissionControl: true
+    # Whether to allow players' permission to override the capacity setting
+    # Permission example: WowSuchCleaner.vault.capacity.18
+    # Note: Max capacity still applies.
       
 cleaning:
   active:

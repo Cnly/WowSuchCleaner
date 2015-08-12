@@ -24,6 +24,7 @@ public class Vault extends ChestMenu
     private static HashSet<Player> opened = new HashSet<>();
     
     private Main main = Main.getInstance();
+    private AuctionConfig auctionConfig = main.getAuctionConfig();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
     
     public Vault(CrafterLocaleManager localeManager, AuctionConfig config)
@@ -34,14 +35,31 @@ public class Vault extends ChestMenu
     @Override
     public ChestMenu openFor(Player p)
     {
+        
         Map<UUID, ItemStack> itemMap = auctionDataManager.getVaultContents(p);
+        int mapSize = itemMap.size();
+        
+        int capacity = auctionConfig.getVaultCapacity(p);
+        
+        if(mapSize > capacity)
+        {
+            this.size = ChestSize.fit(mapSize).getValue();
+        }
+        else
+        {
+            this.size = ChestSize.fit(capacity).getValue();
+        }
+        this.items = new BusyItem[this.size];
+        
         int slot = 0;
         for(Entry<UUID, ItemStack> e : itemMap.entrySet())
         {
             setItem(slot, new VaultItem(slot, e.getKey(), e.getValue()));
             slot++;
         }
+        
         opened.add(p);
+        
         return super.openFor(p);
     }
 

@@ -6,7 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 public class AuctionConfig
 {
@@ -20,6 +22,7 @@ public class AuctionConfig
     private boolean passiveCleaningAuction;
     
     private int vaultCapacity;
+    private boolean vaultCapacityPermissionControl;
     
     private Main main = Main.getInstance();
     private FileConfiguration config = main.getConfig();
@@ -44,6 +47,30 @@ public class AuctionConfig
         
         return null;
     }
+    
+    public int getVaultCapacity(Player p)
+    {
+        
+        int capacity = getVaultCapacity();
+        if(isVaultCapacityPermissionControl())
+        {
+            
+            for(PermissionAttachmentInfo pai : p.getEffectivePermissions())
+            {
+                String per = pai.getPermission();
+                
+                if(!per.toLowerCase().startsWith("wowsuchcleaner.vault.capacity.")) continue;
+                
+                String capacityString = per.split("\\.")[3];
+                capacity = Integer.parseInt(capacityString);
+                
+                continue;
+            }
+            
+        }
+        
+        return capacity;
+    }
 
     private void load()
     {
@@ -59,7 +86,16 @@ public class AuctionConfig
         this.activeCleaningAuction = this.config.getBoolean("cleaning.active.auction");
         this.passiveCleaningAuction = this.config.getBoolean("cleaning.passive.auction");
         
-        this.vaultCapacity = this.config.getInt("vault.capacity");
+        if(this.config.isSet("vault.capacity.defaultCapacity"))
+        {
+            this.vaultCapacity = this.config.getInt("vault.capacity.defaultCapacity");
+        }
+        else
+        {
+            this.vaultCapacity = this.config.getInt("vault.capacity");
+        }
+        
+        this.vaultCapacityPermissionControl = this.config.getBoolean("vault.capacity.permissionControl");
         
     }
     
@@ -86,6 +122,11 @@ public class AuctionConfig
     public int getVaultCapacity()
     {
         return vaultCapacity;
+    }
+
+    public boolean isVaultCapacityPermissionControl()
+    {
+        return vaultCapacityPermissionControl;
     }
     
 }
