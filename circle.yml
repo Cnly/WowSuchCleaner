@@ -2,5 +2,6 @@ machine:
   java:
     version: oraclejdk8
 general:
+  build_dir: WowSuchCleaner
   artifacts:
     - "target/WowSuchCleaner-*.jar"
