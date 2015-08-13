@@ -16,11 +16,11 @@ ui:
   anonymous: '&9[Anonymous]'
 
   bidPrompt: "&bBid by entering your price increment DIRECTLY in the chat or cancel by entering '&acancel&b'. Bid anonymously by prefixing '&aa&b' to your input."
-  chargePerBid: '&bCharge per increment is {chargePercent}% and the minimum charge is {minimumCharge} {currency}.'
+  chargePerBid: '&bCharge per increment is &a{chargePercent}%&b and the minimum charge is &a{minimumCharge} {currency}.'
   wrongBidFormat: '&cWrong bid format.'
   bidCancelled: '&cBid cancelled.'
-  bidTooLow: '&cMinimum increment for this lot is: {minimumIncrement} {currency}'
-  balanceNotEnough: "&cYou don't have enough money. Your balance is: {balance} {currency}"
+  bidTooLow: '&cMinimum increment for this lot is: &e{minimumIncrement} {currency}'
+  balanceNotEnough: "&cYou don't have enough money. Your balance is: &e{balance} {currency}"
   sucessfulBid: '&aBid successfully. Price Increment: &b{price} {currency}&a | Charge: &b{charge} {currency}'
   fullVault: '&cYour vault is full. Note that when you bid for an item for the first time, it uses a slot.'
   itemAlreadySold: '&cThis item has been sold.'
