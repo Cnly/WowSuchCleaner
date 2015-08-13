@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -261,7 +262,15 @@ public class LotShowcase extends ChestMenu
         public void onClick(ItemClickEvent e)
         {
             e.setCloseDirectly(true);
-            bidHandler.requestBid(player, lot, this);
+            Bukkit.getScheduler().runTask(main, new Runnable()
+            { // Task is used for BidCallback::onCancel in BidHandler::requestBid
+                Player tmpPlayer = player;
+                @Override
+                public void run()
+                {
+                    bidHandler.requestBid(tmpPlayer, lot, LotItem.this);
+                }
+            });
         }
 
         @Override

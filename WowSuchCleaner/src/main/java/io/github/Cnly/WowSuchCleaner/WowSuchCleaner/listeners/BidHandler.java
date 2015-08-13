@@ -138,12 +138,14 @@ public class BidHandler implements Listener
         {
             p.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
             p.sendMessage(localeManager.getLocalizedString("ui.bidCancelled"));
+            callback.onCancel(p);
             return;
         }
         
         if(!auctionDataManager.hasBidBefore(p, lot) && !auctionDataManager.isVaultAvailable(p))
         {
             p.sendMessage(localeManager.getLocalizedString("ui.fullVault"));
+            callback.onCancel(p);
             return;
         }
         
