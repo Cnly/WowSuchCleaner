@@ -1,4 +1,7 @@
 auction:
+  bid:
+    intervalInSeconds: 3
+    # Indicates how often could a player bid for one lot
   charge:
     chargePercentPerBid: 1
     # From 0 to 100

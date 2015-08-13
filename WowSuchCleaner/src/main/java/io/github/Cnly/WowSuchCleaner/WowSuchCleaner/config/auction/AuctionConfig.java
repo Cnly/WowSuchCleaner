@@ -16,6 +16,8 @@ public class AuctionConfig
     private double chargePercentPerBid;
     private double minimumChargePerBid;
     
+    private int bidIntervalInSeconds;
+    
     private HashSet<AuctionableItem> auctionableItems = new HashSet<>();
     
     private boolean activeCleaningAuction;
@@ -78,6 +80,8 @@ public class AuctionConfig
         this.chargePercentPerBid = this.config.getDouble("auction.charge.chargePercentPerBid");
         this.minimumChargePerBid = this.config.getDouble("auction.charge.minimumChargePerBid");
         
+        this.bidIntervalInSeconds = this.config.getInt("auction.bid.intervalInSeconds");
+        
         for(Map<?, ?> map : this.config.getMapList("auction.auctionableItems"))
         {
             this.auctionableItems.add(AuctionableItem.fromMap(map));
@@ -107,6 +111,11 @@ public class AuctionConfig
     public double getMinimumChargePerBid()
     {
         return minimumChargePerBid;
+    }
+
+    public int getBidIntervalInSeconds()
+    {
+        return bidIntervalInSeconds;
     }
 
     public boolean isActiveCleaningAuction()

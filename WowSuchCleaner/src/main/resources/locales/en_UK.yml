@@ -21,6 +21,7 @@ ui:
   bidCancelled: '&cBid cancelled.'
   bidTooLow: '&cMinimum increment for this lot is: &e{minimumIncrement} {currency}'
   balanceNotEnough: "&cYou don't have enough money. Your balance is: &e{balance} {currency}"
+  bidTooFast: "&cYou're bidding to fast. Please wait for another &e{time} seconds."
   sucessfulBid: '&aBid successfully. Price Increment: &b{price} {currency}&a | Charge: &b{charge} {currency}'
   fullVault: '&cYour vault is full. Note that when you bid for an item for the first time, it uses a slot.'
   itemAlreadySold: '&cThis item has been sold.'

@@ -115,6 +115,8 @@ public class BidHandler implements Listener
         
         auctionDataManager.bid(p, anonymous, lot, bid);
         
+        auctionDataManager.setLastBid(p, lot, System.currentTimeMillis());
+        
         callback.onBidSuccess(p, bid, anonymous);
         biddingPlayers.remove(uuid);
         
@@ -145,6 +147,17 @@ public class BidHandler implements Listener
         if(!auctionDataManager.hasBidBefore(p, lot) && !auctionDataManager.isVaultAvailable(p))
         {
             p.sendMessage(localeManager.getLocalizedString("ui.fullVault"));
+            callback.onCancel(p);
+            return;
+        }
+        
+        long deltaSeconds = (System.currentTimeMillis() - auctionDataManager.getLastBid(p, lot)) / 1000;
+        long bidInterval = auctionConfig.getBidIntervalInSeconds();
+        
+        if(deltaSeconds < bidInterval)
+        {
+            p.sendMessage(localeManager.getLocalizedString("ui.bidTooFast")
+                    .replace("{time}", String.valueOf(bidInterval - deltaSeconds)));
             callback.onCancel(p);
             return;
         }

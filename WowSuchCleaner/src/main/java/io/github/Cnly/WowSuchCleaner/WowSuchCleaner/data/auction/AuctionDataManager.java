@@ -205,6 +205,18 @@ public class AuctionDataManager
         
     }
     
+    public long getLastBid(Player p, Lot lot)
+    {
+        String lastBidPath = new StringBuilder(90).append("lots.").append(lot.getUuid()).append(".bid.lastBid.").append(p.getUniqueId()).toString();
+        return data.getYamlConfig().getLong(lastBidPath);
+    }
+    
+    public void setLastBid(Player p, Lot lot, long lastBid)
+    {
+        String lastBidPath = new StringBuilder(90).append("lots.").append(lot.getUuid()).append(".bid.lastBid.").append(p.getUniqueId()).toString();
+        data.set(lastBidPath, lastBid);
+    }
+    
     public boolean isVaultAvailable(Player p)
     {
         
