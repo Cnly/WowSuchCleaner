@@ -20,6 +20,7 @@ import io.github.Cnly.Crafter.Crafter.framework.locales.CrafterLocaleManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionableItem;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotShowcase;
 
 public class AuctionDataManager
 {
@@ -111,6 +112,8 @@ public class AuctionDataManager
         Lot lot = new Lot(item, false, startingPrice, null, null, -1, minimumIncrement, System.currentTimeMillis() + ai.getPreserveTimeInSeconds() * 1000, ai.getAuctionDurationInSeconds() * 1000);
         lots.add(lot);
         
+        LotShowcase.updateAll();
+        
         return true;
     }
     
@@ -118,6 +121,7 @@ public class AuctionDataManager
     {
         boolean success = lots.remove(lot);
         removeFromBackend(lot);
+        LotShowcase.updateAll();
         return success;
     }
     
@@ -202,6 +206,8 @@ public class AuctionDataManager
         lot.setLastBidPlayerUuid(p.getUniqueId());
         lot.setLastBidPrice(priceIncrement);
         lot.setPrice(lot.getPrice() + priceIncrement);
+        
+        LotShowcase.updateAll();
         
     }
     

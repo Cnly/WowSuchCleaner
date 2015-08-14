@@ -2,9 +2,11 @@ package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -25,7 +27,7 @@ import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners.BidHandler.BidCall
 public class LotShowcase extends ChestMenu
 {
     
-    private static HashSet<Player> opened = new HashSet<>();
+    private static HashMap<Player, LotShowcase> opened = new HashMap<>();
     
     private static final ItemStack PAGE_BUTTON_ICON = new ItemStack(Material.LADDER);
     private static final ItemStack PAGE_INDICATOR_ICON = new ItemStack(Material.PAPER);
@@ -59,7 +61,7 @@ public class LotShowcase extends ChestMenu
         this.setPageContent(naturalPage);
         super.openFor(p);
         this.player = p;
-        opened.add(p);
+        opened.put(p, this);
     }
 
     @Override
@@ -77,10 +79,18 @@ public class LotShowcase extends ChestMenu
         opened.remove(e.getPlayer());
     }
     
+    public static void updateAll()
+    {
+        for(Entry<Player, LotShowcase> e : opened.entrySet())
+        {
+            e.getValue().updateFor(e.getKey());
+        }
+    }
+    
     public static Collection<Player> closeAll()
     {
         
-        Collection<Player> result = new HashSet<Player>(opened);
+        Collection<Player> result = new HashSet<Player>(opened.keySet());
         
         for(Player p : result)
         {
