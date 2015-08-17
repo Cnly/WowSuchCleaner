@@ -3,14 +3,14 @@ package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands;
 import org.bukkit.command.CommandSender;
 
 import io.github.Cnly.Crafter.Crafter.framework.commands.AbstractCrafterCommand;
-import io.github.Cnly.Crafter.Crafter.framework.locales.CrafterLocaleManager;
+import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 
 public class ReloadCommand extends AbstractCrafterCommand
 {
     
     private Main main = Main.getInstance();
-    private CrafterLocaleManager localeManager = main.getLocaleManager();
+    private ILocaleManager localeManager = main.getLocaleManager();
     
     public ReloadCommand()
     {

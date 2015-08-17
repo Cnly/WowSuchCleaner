@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import io.github.Cnly.Crafter.Crafter.framework.configs.CrafterYamlConfigManager;
-import io.github.Cnly.Crafter.Crafter.framework.locales.CrafterLocaleManager;
+import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionableItem;
@@ -27,7 +27,7 @@ public class AuctionDataManager
     
     private Main main = Main.getInstance();
     private AuctionConfig auctionConfig = main.getAuctionConfig();
-    private CrafterLocaleManager localeManager = main.getLocaleManager();
+    private ILocaleManager localeManager = main.getLocaleManager();
     
     private CrafterYamlConfigManager data = new CrafterYamlConfigManager(new File(main.getDataFolder(), "auctionData.yml"), false, main)
     {

@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import io.github.Cnly.BusyInv.BusyInv.events.ItemClickEvent;
 import io.github.Cnly.BusyInv.BusyInv.items.BusyItem;
 import io.github.Cnly.BusyInv.BusyInv.menus.ChestMenu;
-import io.github.Cnly.Crafter.Crafter.framework.locales.CrafterLocaleManager;
+import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.Lot;
@@ -36,12 +36,12 @@ public class LotShowcase extends ChestMenu
     private Main main = Main.getInstance();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
     private BidHandler bidHandler = main.getBidHandler();
-    private CrafterLocaleManager localeManager;
+    private ILocaleManager localeManager;
     
     private Player player;
     private int currentNaturalPage;
     
-    public LotShowcase(CrafterLocaleManager localeManager)
+    public LotShowcase(ILocaleManager localeManager)
     {
         super(localeManager.getLocalizedString("ui.title"), null, ChestSize.SIX_LINES);
         this.localeManager = localeManager;

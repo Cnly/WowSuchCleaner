@@ -1,6 +1,6 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners;
 
-import io.github.Cnly.Crafter.Crafter.framework.locales.CrafterLocaleManager;
+import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
@@ -23,7 +23,7 @@ public class BidHandler implements Listener
     
     private HashMap<UUID, BidArgument> biddingPlayers = new HashMap<>();
     private Main main = Main.getInstance();
-    private CrafterLocaleManager localeManager = main.getLocaleManager();
+    private ILocaleManager localeManager = main.getLocaleManager();
     private AuctionConfig auctionConfig = main.getAuctionConfig();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
     

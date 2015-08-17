@@ -5,6 +5,7 @@ import java.io.File;
 import io.github.Cnly.BusyInv.BusyInv.BusyInv;
 import io.github.Cnly.Crafter.Crafter.framework.commands.CrafterMainCommand;
 import io.github.Cnly.Crafter.Crafter.framework.locales.CrafterLocaleManager;
+import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.AuctionCommand;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.ReloadCommand;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.ShowcaseCommand;
@@ -130,7 +131,7 @@ public class Main extends JavaPlugin
         return activeCleaningConfig;
     }
 
-    public CrafterLocaleManager getLocaleManager()
+    public ILocaleManager getLocaleManager()
     {
         return localeManager;
     }

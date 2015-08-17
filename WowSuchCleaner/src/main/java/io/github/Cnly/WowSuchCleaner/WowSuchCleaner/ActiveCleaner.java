@@ -6,7 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import io.github.Cnly.Crafter.Crafter.framework.locales.CrafterLocaleManager;
+import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.activecleaning.ActiveCleaningConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 
@@ -15,7 +15,7 @@ public class ActiveCleaner extends BukkitRunnable
     
     private Main main = Main.getInstance();
     private ActiveCleaningConfig activeCleaningConfig = main.getActiveCleaningConfig();
-    private CrafterLocaleManager localeManager = main.getLocaleManager();
+    private ILocaleManager localeManager = main.getLocaleManager();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
     
     private int secondsRemaining = activeCleaningConfig.getIntervalInSeconds();

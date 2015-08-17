@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.Cnly.Crafter.Crafter.framework.commands.AbstractCrafterCommand;
-import io.github.Cnly.Crafter.Crafter.framework.locales.CrafterLocaleManager;
+import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 
@@ -13,7 +13,7 @@ public class AuctionCommand extends AbstractCrafterCommand
 {
     
     private Main main = Main.getInstance();
-    private CrafterLocaleManager localeManager = main.getLocaleManager();
+    private ILocaleManager localeManager = main.getLocaleManager();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
     
     public AuctionCommand()
