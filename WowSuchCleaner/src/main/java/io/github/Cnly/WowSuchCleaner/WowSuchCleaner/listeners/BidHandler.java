@@ -42,14 +42,14 @@ public class BidHandler implements Listener
         
         e.setCancelled(true);
         
-        if(!auctionDataManager.hasLot(lot))
-        {
-            p.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
-            p.sendMessage(localeManager.getLocalizedString("ui.bidCancelled"));
-            callback.onCancel(p);
-            biddingPlayers.remove(uuid);
-            return;
-        }
+//        if(!auctionDataManager.hasLot(lot))
+//        {
+//            p.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
+//            p.sendMessage(localeManager.getLocalizedString("ui.bidCancelled"));
+//            callback.onCancel(p);
+//            biddingPlayers.remove(uuid);
+//            return;
+//        }
         
         boolean anonymous = false;
         String msg = e.getMessage();

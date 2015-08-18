@@ -271,16 +271,42 @@ public class LotShowcase extends ChestMenu
         @Override
         public void onClick(ItemClickEvent e)
         {
-            e.setCloseDirectly(true);
-            Bukkit.getScheduler().runTask(main, new Runnable()
-            { // Task is used for BidCallback::onCancel in BidHandler::requestBid
-                Player tmpPlayer = player;
-                @Override
-                public void run()
-                {
-                    bidHandler.requestBid(tmpPlayer, lot, LotItem.this);
-                }
-            });
+            
+            if(!auctionDataManager.hasLot(lot))
+            {
+                player.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
+                updateFor(player);
+                return;
+            }
+            
+            switch(e.getClickType())
+            {
+            
+            case LEFT:
+                // fall down
+            case SHIFT_LEFT:
+                e.setCloseDirectly(true);
+                Bukkit.getScheduler().runTask(main, new Runnable()
+                { // Task is used for BidCallback::onCancel in BidHandler::requestBid
+                    Player tmpPlayer = player;
+                    @Override
+                    public void run()
+                    {
+                        bidHandler.requestBid(tmpPlayer, lot, LotItem.this);
+                    }
+                });
+                
+                break;
+            case RIGHT:
+                // fall down
+            case SHIFT_RIGHT:
+                if(!player.hasPermission("WowSuchCleaner.lotOperationMenu.open")) return;
+                new LotOperationMenu(localeManager, lot, LotShowcase.this, player, currentNaturalPage).openFor(player);
+                break;
+            default:
+                break;
+            }
+            
         }
 
         @Override

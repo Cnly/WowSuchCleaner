@@ -15,6 +15,15 @@ ui:
   timeRemaining: '&r&bTime remaining in seconds: &a{time}'
   anonymous: '&9[Anonymous]'
 
+  lotOperationMenu: Lot Operation Menu
+  forcePurchase: '&6Force Purchase'
+  forcePurchaseLore: '&6Purchase this lot forcefully at current price'
+  removeLot: '&cRemove Lot'
+  removeLotLore: '&cRemove this lot and send it to your inventory'
+  removeLotLore2: '&cShift + click to remove and discard'
+  fullInventory: '&cYour inventory is full.'
+  back: '&aBack'
+
   bidPrompt: "&bBid by entering your price increment DIRECTLY in the chat or cancel by entering '&acancel&b'. Bid anonymously by prefixing '&aa&b' to your input."
   chargePerBid: '&bCharge per increment is &a{chargePercent}%&b and the minimum charge is &a{minimumCharge} {currency}.'
   wrongBidFormat: '&cWrong bid format.'

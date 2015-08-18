@@ -15,6 +15,15 @@ ui:
   timeRemaining: '&r&b剩余时间: &a{time} 秒'
   anonymous: '&9[匿名]'
 
+  lotOperationMenu: 拍卖品操作菜单
+  forcePurchase: '&6强制购买'
+  forcePurchaseLore: '&6强制以当前价格购买该商品'
+  removeLot: '&c移除商品'
+  removeLotLore: '&c移除该商品并将其发送到你的背包'
+  removeLotLore2: '&c按住Shift点击可移除该商品并丢弃'
+  fullInventory: '&c你的背包已满。'
+  back: '&a返回'
+
   bidPrompt: "&b直接在聊天框中输入价格增幅来出价，或者输入&acancel&b取消。在价格前加&aa&b可以匿名出价。"
   chargePerBid: '&b每次加价的手续费是&a{chargePercent}%&b ，最低手续费是&a{minimumCharge} {currency}。'
   wrongBidFormat: '&c出价格式错误。'

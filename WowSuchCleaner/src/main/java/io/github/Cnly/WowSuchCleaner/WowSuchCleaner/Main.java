@@ -13,6 +13,7 @@ import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.VaultCommand;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.activecleaning.ActiveCleaningConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotOperationMenu;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotShowcase;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.Vault;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners.BidHandler;
@@ -108,6 +109,7 @@ public class Main extends JavaPlugin
         
         LotShowcase.closeAll();
         Vault.closeAll();
+        LotOperationMenu.closeAll();
         
         auctionDataManager.shutdownGracefully();
         

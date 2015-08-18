@@ -20,6 +20,7 @@ import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionableItem;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotOperationMenu;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotShowcase;
 
 public class AuctionDataManager
@@ -122,6 +123,7 @@ public class AuctionDataManager
         boolean success = lots.remove(lot);
         removeFromBackend(lot);
         LotShowcase.updateAll();
+        LotOperationMenu.updateAll();
         return success;
     }
     
@@ -208,6 +210,7 @@ public class AuctionDataManager
         lot.setPrice(lot.getPrice() + priceIncrement);
         
         LotShowcase.updateAll();
+        LotOperationMenu.updateAll();
         
     }
     
@@ -287,6 +290,15 @@ public class AuctionDataManager
         }
         
         return result;
+    }
+    
+    public void returnDeposit(Lot lot)
+    {
+        for(Entry<UUID, Double> e : getDeposit(lot).entrySet())
+        {
+            Player p = Bukkit.getPlayer(e.getKey());
+            Main.economy.depositPlayer(p != null ? p : Bukkit.getOfflinePlayer(e.getKey()), e.getValue());
+        }
     }
     
     public void hammer(Lot lot)
