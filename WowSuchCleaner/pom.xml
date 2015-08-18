@@ -8,7 +8,7 @@
     <properties>
         <bukkit.version>1.8.6-R0.1-SNAPSHOT</bukkit.version>
         <crafter.version>1.4.0-SNAPSHOT</crafter.version>
-        <busyinv.version>1.0.1</busyinv.version>
+        <busyinv.version>1.0.5-SNAPSHOT</busyinv.version>
         <vault.version>1.5</vault.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
