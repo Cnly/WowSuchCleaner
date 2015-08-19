@@ -98,7 +98,7 @@ public class LotShowcase extends ChestMenu
             reloadFor(p);
             return;
         }
-         // MODIFICATION END
+        // MODIFICATION END
         
         BusyItem bi = this.items[rawSlot];
         if(null == bi)

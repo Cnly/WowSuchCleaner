@@ -113,7 +113,7 @@ public class LotOperationMenu extends ChestMenu
             reloadFor(p);
             return;
         }
-         // MODIFICATION END
+        // MODIFICATION END
         
         BusyItem bi = this.items[rawSlot];
         if(null == bi)
