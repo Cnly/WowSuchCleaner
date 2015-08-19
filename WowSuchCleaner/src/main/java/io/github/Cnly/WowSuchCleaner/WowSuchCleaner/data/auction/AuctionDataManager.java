@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import io.github.Cnly.Crafter.Crafter.framework.configs.CrafterYamlConfigManager;
 import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
+import io.github.Cnly.Crafter.Crafter.utils.CompatUtils;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionableItem;
@@ -267,6 +267,49 @@ public class AuctionDataManager
         
     }
     
+    public void addDepositToVault(UUID uuid, double deposit)
+    {
+        String path = new StringBuilder(51).append("vaults.").append(uuid.toString()).append('.').append("deposit").toString();
+        double original = data.getYamlConfig().getDouble(path, 0);
+        data.set(path, original + deposit);
+    }
+    
+    public void removeDepositFromVault(UUID uuid, double deposit)
+    {
+        String path = new StringBuilder(51).append("vaults.").append(uuid.toString()).append('.').append("deposit").toString();
+        double original = data.getYamlConfig().getDouble(path, 0);
+        double newDeposit = original - deposit;
+        if(newDeposit <= 0)
+        {
+            data.set(path, null);
+        }
+        else
+        {
+            data.set(path, newDeposit);
+        }
+    }
+    
+    public void removeDepositFromVault(UUID uuid)
+    {
+        String path = new StringBuilder(51).append("vaults.").append(uuid.toString()).append('.').append("deposit").toString();
+        data.set(path, null);
+    }
+    
+    public double getDepositInVault(UUID uuid)
+    {
+        String path = new StringBuilder(51).append("vaults.").append(uuid.toString()).append('.').append("deposit").toString();
+        return data.getYamlConfig().getDouble(path, 0);
+    }
+    
+    public void returnDepositInVault(UUID uuid)
+    {
+        Player p = CompatUtils.getPlayer(uuid);
+        double deposit = getDepositInVault(uuid);
+        if(deposit <= 0) return;
+        Main.economy.depositPlayer(p, deposit);
+        removeDepositFromVault(uuid);
+    }
+    
     public void addDeposit(Lot lot, Player p, double deposit)
     {
         String depositPath = new StringBuilder(86).append("lots.").append(lot.getUuid()).append(".deposit.").append(p.getUniqueId()).toString();
@@ -296,8 +339,15 @@ public class AuctionDataManager
     {
         for(Entry<UUID, Double> e : getDeposit(lot).entrySet())
         {
-            Player p = Bukkit.getPlayer(e.getKey());
-            Main.economy.depositPlayer(p != null ? p : Bukkit.getOfflinePlayer(e.getKey()), e.getValue());
+            Player p = CompatUtils.getPlayer(e.getKey());
+            if(p != null)
+            {
+                Main.economy.depositPlayer(p, e.getValue());
+            }
+            else
+            {
+                addDepositToVault(e.getKey(), e.getValue());
+            }
         }
     }
     
@@ -305,7 +355,7 @@ public class AuctionDataManager
     {
         
         UUID buyerUuid = lot.getLastBidPlayerUuid();
-        Player buyer = Bukkit.getPlayer(buyerUuid);
+        Player buyer = CompatUtils.getPlayer(buyerUuid);
         if(null == buyer || buyer.getInventory().firstEmpty() == -1)
         {
             String path = new StringBuilder(80).append("vaults.").append(buyerUuid.toString()).append('.').append(lot.getUuid()).toString();
@@ -325,14 +375,18 @@ public class AuctionDataManager
         for(Entry<UUID, Double> e : deposit.entrySet())
         {
             
-            Player p = Bukkit.getPlayer(e.getKey());
+            Player p = CompatUtils.getPlayer(e.getKey());
             
             if(null != p)
             {
                 p.sendMessage(localeManager.getLocalizedString("ui.hammerOthers"));
+                Main.economy.depositPlayer(p, e.getValue());
+            }
+            else
+            {
+                addDepositToVault(e.getKey(), e.getValue());
             }
             
-            Main.economy.depositPlayer(p != null ? p : Bukkit.getOfflinePlayer(e.getKey()), e.getValue());
             unoccupyVault(e.getKey());
             
         }

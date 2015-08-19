@@ -18,6 +18,7 @@ import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotShowcase;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.Vault;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners.BidHandler;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners.PassiveCleaningItemListener;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners.PlayerListener;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
@@ -89,6 +90,7 @@ public class Main extends JavaPlugin
         }
         
         getServer().getPluginManager().registerEvents(bidHandler = new BidHandler(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         
         // <<<<< Listeners <<<<<
         
