@@ -13,10 +13,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import io.github.Cnly.BusyInv.BusyInv.apis.IOpenable;
 import io.github.Cnly.BusyInv.BusyInv.events.ItemClickEvent;
 import io.github.Cnly.BusyInv.BusyInv.items.BusyItem;
 import io.github.Cnly.BusyInv.BusyInv.menus.BusyMenu;
@@ -93,6 +95,61 @@ public class LotOperationMenu extends ChestMenu
     {
         opened.remove(e.getPlayer());
         super.onMenuClose(e);
+    }
+    
+    @Override
+    public void onMenuClick(InventoryClickEvent e)
+    {
+        
+        Player p = (Player)e.getWhoClicked();
+        
+        int rawSlot = e.getRawSlot();
+        if(rawSlot < 0 || rawSlot >= this.size)
+            return;
+        
+        // MODIFICATION START
+        if(e.getClick() == ClickType.DROP)
+        {
+            reloadFor(p);
+            return;
+        }
+         // MODIFICATION END
+        
+        BusyItem bi = this.items[rawSlot];
+        if(null == bi)
+            return;
+        ItemClickEvent ice = new ItemClickEvent(p, this, e.getClick(),
+                e.getHotbarButton());
+        bi.onClick(ice);
+        
+        if(ice.willCloseDirectly())
+        {
+            // The following is a magic
+            if(rawSlot <= 44)
+                p.closeInventory();
+            else
+                this.closeInventorySafely(p);
+            return;
+        }
+        
+        if(ice.willOpenParent())
+        {
+            IOpenable parentMenu = this.openParentFor(p);
+            if(null == parentMenu && ice.willCloseOnNoParent())
+                // The following is a magic
+                if(rawSlot <= 44)
+                    p.closeInventory();
+                else
+                    this.closeInventorySafely(p);
+            return;
+        }
+        
+        if(ice.willReloadMenu())
+        {
+            reloadFor(p);
+            return;
+        }
+        
     }
     
     public static void updateAll()

@@ -4,7 +4,7 @@
   
 ui:
   title: '拍卖品目录(点击可出价)'
-  clickToRefresh: '&r&b刷新'
+  clickToRefresh: '&r&b刷新(Q)'
   prevPageButton: '&r&b上一页: &a{page}'
   nextPageButton: '&r&b下一页: &a{page}'
   currentPage: '&r&b当前页码: &a{page}'

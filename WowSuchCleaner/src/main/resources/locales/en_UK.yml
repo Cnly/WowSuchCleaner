@@ -4,7 +4,7 @@ cleaning:
   
 ui:
   title: 'Lot List (Click to bid)'
-  clickToRefresh: '&r&bRefresh'
+  clickToRefresh: '&r&bRefresh(Q)'
   prevPageButton: '&r&bPrev Page: &a{page}'
   nextPageButton: '&r&bNext Page: &a{page}'
   currentPage: '&r&bCurrent Page: &a{page}'
