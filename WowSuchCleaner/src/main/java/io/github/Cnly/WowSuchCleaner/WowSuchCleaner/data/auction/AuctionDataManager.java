@@ -35,8 +35,13 @@ public class AuctionDataManager
         @Override
         public CrafterYamlConfigManager save()
         {
-            AuctionDataManager.this.save();
             return super.save();
+        }
+        @Override
+        protected Runnable getAsynchronousSaveRunnable()
+        {
+            AuctionDataManager.this.save();
+            return super.getAsynchronousSaveRunnable();
         }
     };
     
@@ -46,12 +51,15 @@ public class AuctionDataManager
     {
         this.load();
         data.setAutoSaveInterval(60);
+        data.setAsynchronousAutoSave(true);
         new LotMaintainTask().runTaskTimer(main, 20L, 20L);
     }
     
     public void shutdownGracefully()
     {
         data.setAutoSaveInterval(0);
+        data.shutdownAsynchronousSavingConsumer();
+        this.save();
         data.save();
     }
     
@@ -134,10 +142,33 @@ public class AuctionDataManager
     
     private void save()
     {
+        
         for(Lot lot : lots)
         {
             this.saveToBackend(lot);
         }
+        
+        // Vaults section cleanup
+        ConfigurationSection vaultsSection = data.getYamlConfig().getConfigurationSection("vaults");
+        if(vaultsSection != null)
+        {
+            for(Entry<String, Object> e : vaultsSection.getValues(false).entrySet())
+            {
+                
+                Object v = e.getValue();
+                if(!(v instanceof ConfigurationSection)) continue;
+                
+                ConfigurationSection singleVaultSection = (ConfigurationSection)v;
+                int size = singleVaultSection.getKeys(false).size();
+                
+                if(size == 0 || (size == 1 && singleVaultSection.isSet("itemCount") && singleVaultSection.getInt("itemCount") == 0))
+                {
+                    vaultsSection.set(e.getKey(), null);
+                }
+                
+            }
+        }
+        
     }
     
     public boolean hasBidBefore(Player p, Lot lot)
