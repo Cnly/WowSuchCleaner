@@ -9,11 +9,11 @@ import org.bukkit.inventory.ItemStack;
 public class AuctionableItem
 {
     
-    private final ItemStack item;
-    private final double startingPrice;
-    private final double minimumIncrement;
-    private final int preserveTimeInSeconds;
-    private final int auctionDurationInSeconds;
+    protected final ItemStack item;
+    protected final double startingPrice;
+    protected final double minimumIncrement;
+    protected final int preserveTimeInSeconds;
+    protected final int auctionDurationInSeconds;
     
     @SuppressWarnings("unchecked")
     public static AuctionableItem fromMap(Map<?, ?> map)
@@ -21,13 +21,21 @@ public class AuctionableItem
         
         Map<String, Object> convertedMap = (Map<String, Object>)map;
         
-        Object itemRepresent = convertedMap.get("item");
-        ItemStack item = ItemUtils.getItemByIdString((String)itemRepresent);
-        
+        String itemRepresent = (String)convertedMap.get("item");
         double startingPrice = (double)convertedMap.get("startingPrice");
         double minimumIncrement = (double)convertedMap.get("minimumIncrement");
         int preserveTimeInSeconds = (int)convertedMap.get("preserveTimeInSeconds");
         int auctionDurationInSeconds = (int)convertedMap.get("auctionDurationInSeconds");
+        
+        ItemStack item = null;
+        if(itemRepresent.equalsIgnoreCase("default"))
+        {
+            return new DefaultItem(startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
+        }
+        else
+        {
+            item = ItemUtils.getItemByIdString(itemRepresent);
+        }
         
         return new AuctionableItem(item, startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
     }

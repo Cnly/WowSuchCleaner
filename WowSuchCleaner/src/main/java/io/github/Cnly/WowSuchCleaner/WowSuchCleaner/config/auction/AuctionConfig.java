@@ -2,7 +2,7 @@ package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction;
 
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,7 +18,8 @@ public class AuctionConfig
     
     private int bidIntervalInSeconds;
     
-    private HashSet<AuctionableItem> auctionableItems = new HashSet<>();
+    private boolean useAsBlacklist;
+    private ArrayList<AuctionableItem> auctionableItems = new ArrayList<>();
     
     private boolean activeCleaningAuction;
     private boolean passiveCleaningAuction;
@@ -42,9 +43,26 @@ public class AuctionConfig
     public AuctionableItem getAuctionableItemConfig(ItemStack item)
     {
         
-        for(AuctionableItem ai : auctionableItems)
+        if(!useAsBlacklist)
         {
-            if(ai.isTheSameItem(item)) return ai;
+            for(AuctionableItem ai : auctionableItems)
+            {
+                if(ai.isTheSameItem(item)) return ai;
+            }
+        }
+        else
+        {
+            for(AuctionableItem ai : auctionableItems)
+            {
+                if(!(ai instanceof DefaultItem))
+                {
+                    if(ai.isTheSameItem(item)) return null;
+                }
+                else
+                {
+                    return ai;
+                }
+            }
         }
         
         return null;
@@ -82,6 +100,7 @@ public class AuctionConfig
         
         this.bidIntervalInSeconds = this.config.getInt("auction.bid.intervalInSeconds");
         
+        this.useAsBlacklist = this.config.getBoolean("auction.useAsBlacklist");
         for(Map<?, ?> map : this.config.getMapList("auction.auctionableItems"))
         {
             this.auctionableItems.add(AuctionableItem.fromMap(map));
@@ -121,6 +140,11 @@ public class AuctionConfig
     public boolean isActiveCleaningAuction()
     {
         return activeCleaningAuction;
+    }
+
+    public boolean isUseAsBlacklist()
+    {
+        return useAsBlacklist;
     }
 
     public boolean isPassiveCleaningAuction()

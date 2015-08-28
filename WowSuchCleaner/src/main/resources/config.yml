@@ -6,6 +6,13 @@ auction:
     chargePercentPerBid: 1
     # From 0 to 100
     minimumChargePerBid: 1
+  useAsBlacklist: false
+  # Change to true will use the following list as blacklist
+  # You probably need a 'DEFAULT' item AT THE END OF THE LIST if you're using blacklist mode
+  # A 'DEFAULT' item is a special item that acts like a wildcard
+  # Normally, a 'DEFAULT' item is put AT THE END OF THE LIST because the plugin find matching items orderly
+  # A 'DEFAULT' item could be used in non-blacklist mode too, representing those items that don't have specific settings
+  # To specify a 'DEFAULT' item, just set an item's ID to DEFAULT
   auctionableItems:
     - item: '4'
       startingPrice: 0.98
