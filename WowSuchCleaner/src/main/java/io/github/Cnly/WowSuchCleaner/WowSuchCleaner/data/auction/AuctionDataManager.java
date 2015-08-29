@@ -161,7 +161,7 @@ public class AuctionDataManager
                 ConfigurationSection singleVaultSection = (ConfigurationSection)v;
                 int size = singleVaultSection.getKeys(false).size();
                 
-                if(size == 0 || (size == 1 && singleVaultSection.isSet("itemCount") && singleVaultSection.getInt("itemCount") == 0))
+                if(size == 0 || (size == 1 && singleVaultSection.getInt("itemCount", -1) == 0))
                 {
                     vaultsSection.set(e.getKey(), null);
                 }
