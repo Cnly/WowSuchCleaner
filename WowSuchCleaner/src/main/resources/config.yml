@@ -9,7 +9,7 @@ auction:
   useAsBlacklist: false
   # Change to true will use the following list as blacklist
   # You probably need a 'DEFAULT' item AT THE END OF THE LIST if you're using blacklist mode
-  # A 'DEFAULT' item is a special item that acts like a wildcard
+  # A 'DEFAULT' item is an OPTIONAL special item that acts like a wildcard
   # Normally, a 'DEFAULT' item is put AT THE END OF THE LIST because the plugin find matching items orderly
   # A 'DEFAULT' item could be used in non-blacklist mode too, representing those items that don't have specific settings
   # To specify a 'DEFAULT' item, just set an item's ID to DEFAULT
@@ -22,6 +22,11 @@ auction:
       # The time for which the item should be in the showcase before bidding for this item is started
       auctionDurationInSeconds: 300
       # The time in which the item should be sold after bidding for this item has started
+    - item: DEFAULT
+      startingPrice: 1.00
+      minimumIncrement: 0.05
+      preserveTimeInSeconds: 600
+      auctionDurationInSeconds: 300
       
 vault:
   capacity:
