@@ -6,6 +6,7 @@ import io.github.Cnly.BusyInv.BusyInv.BusyInv;
 import io.github.Cnly.Crafter.Crafter.framework.commands.CrafterMainCommand;
 import io.github.Cnly.Crafter.Crafter.framework.locales.CrafterLocaleManager;
 import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
+import io.github.Cnly.Crafter.Crafter.utils.CommandUtils;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.AuctionCommand;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.ReloadCommand;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.ShowcaseCommand;
@@ -78,7 +79,7 @@ public class Main extends JavaPlugin
         mainCommand.addSubcommand(new VaultCommand());
         mainCommand.addSubcommand(new ReloadCommand());
         
-        getCommand("wowsuchcleaner").setExecutor(mainCommand);
+        CommandUtils.register(this, "wowsuchcleaner", mainCommand, "wsc");
         
         // <<<<< Commands <<<<<
         

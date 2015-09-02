@@ -3,9 +3,3 @@ main: ${project.groupId}.${project.artifactId}.Main
 version: ${project.version}
 author: Cnly
 depend: [Vault]
-
-commands:
-  wowsuchcleaner:
-    aliases: [wsc]
-    description: The main command of WowSuchCleaner.
-    usage: /wsc
