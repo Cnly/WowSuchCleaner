@@ -1,0 +1,12 @@
+machine:
+  java:
+    version: oraclejdk7
+  pre:
+    - wget https://github.com/Cnly/Crafter/archive/master.zip -O crafter.tar.gz
+    - tar -xvf crafter.tar.gz
+    - mvn clean install:
+        pwd: $HOME/Crafter-master/Crafter
+general:
+  build_dir: WowSuchCleaner
+  artifacts:
+    - "target/WowSuchCleaner-*.jar"
