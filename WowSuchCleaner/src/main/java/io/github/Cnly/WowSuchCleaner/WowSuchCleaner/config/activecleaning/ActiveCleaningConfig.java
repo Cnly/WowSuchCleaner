@@ -14,6 +14,7 @@ public class ActiveCleaningConfig
 {
     
     private boolean enabled;
+    private boolean auction;
     private int intervalInSeconds;
     private List<ItemStack> preservedItems;
     private List<Integer> notifyTimes;
@@ -33,6 +34,7 @@ public class ActiveCleaningConfig
         this.notifyTimes = new ArrayList<>();
         
         this.enabled = config.getBoolean("cleaning.active.enabled");
+        this.auction = config.getBoolean("cleaning.active.auction");
         this.intervalInSeconds = config.getInt("cleaning.active.intervalInSeconds");
         
         List<String> tempPreservedItems = config.getStringList("cleaning.active.preservedItems");
@@ -66,6 +68,11 @@ public class ActiveCleaningConfig
     public boolean isEnabled()
     {
         return enabled;
+    }
+
+    public boolean isAuction()
+    {
+        return auction;
     }
 
     public int getIntervalInSeconds()

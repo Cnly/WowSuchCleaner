@@ -18,6 +18,8 @@ public class ActiveCleaner extends BukkitRunnable
     private ILocaleManager localeManager = main.getLocaleManager();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
     
+    private boolean isAuction = activeCleaningConfig.isAuction();
+    
     private int secondsRemaining = activeCleaningConfig.getIntervalInSeconds();
     
     @Override
@@ -46,10 +48,13 @@ public class ActiveCleaner extends BukkitRunnable
                     {
                         Item item = (Item)e;
                         if(activeCleaningConfig.isPreservedItem(item.getItemStack())) continue;
-                        boolean auction = auctionDataManager.addLot(item.getItemStack());
                         item.remove();
                         count++;
-                        if(auction) auctionCount++;
+                        if(isAuction)
+                        {
+                            boolean auction = auctionDataManager.addLot(item.getItemStack());
+                            if(auction) auctionCount++;
+                        }
                     }
                 }
             }
