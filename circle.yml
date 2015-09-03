@@ -6,6 +6,11 @@ machine:
     - unzip crafter.zip
     - mvn clean install:
         pwd: $HOME/Crafter-master/Crafter
+    #
+    - wget https://github.com/Cnly/BusyInv/archive/master.zip -O busyinv.zip
+    - unzip busyinv.zip
+    - mvn clean install:
+        pwd: $HOME/BusyInv-master
 general:
   build_dir: WowSuchCleaner
   artifacts:
