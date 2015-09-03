@@ -2,8 +2,8 @@ machine:
   java:
     version: oraclejdk7
   pre:
-    - wget https://github.com/Cnly/Crafter/archive/master.zip -O crafter.tar.gz
-    - tar -xvf crafter.tar.gz
+    - wget https://github.com/Cnly/Crafter/archive/master.zip -O crafter.zip
+    - unzip crafter.zip
     - mvn clean install:
         pwd: $HOME/Crafter-master/Crafter
 general:
