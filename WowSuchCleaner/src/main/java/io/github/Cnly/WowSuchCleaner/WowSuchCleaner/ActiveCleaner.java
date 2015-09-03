@@ -1,9 +1,12 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
@@ -39,6 +42,7 @@ public class ActiveCleaner extends BukkitRunnable
             
             int count = 0;
             int auctionCount = 0;
+            ArrayList<ItemStack> cleanedItems = new ArrayList<>();
             
             for(World w : Bukkit.getWorlds())
             {
@@ -46,15 +50,52 @@ public class ActiveCleaner extends BukkitRunnable
                 {
                     if(e instanceof Item)
                     {
+                        
                         Item item = (Item)e;
-                        if(activeCleaningConfig.isPreservedItem(item.getItemStack())) continue;
+                        ItemStack is = item.getItemStack();
+                        if(activeCleaningConfig.isPreservedItem(is)) continue;
                         item.remove();
                         count++;
+                        
                         if(isAuction)
                         {
-                            boolean auction = auctionDataManager.addLot(item.getItemStack());
-                            if(auction) auctionCount++;
+                            
+                            if(activeCleaningConfig.isAutoMerge())
+                            {
+                                for(ItemStack cleanedItem : cleanedItems)
+                                {
+                                    if(cleanedItem.isSimilar(is) && cleanedItem.getAmount() < cleanedItem.getMaxStackSize())
+                                    {
+                                        
+                                        int slotLeft = cleanedItem.getMaxStackSize() - cleanedItem.getAmount();
+                                        
+                                        if(is.getAmount() <= slotLeft)
+                                        {
+                                            cleanedItem.setAmount(cleanedItem.getAmount() + is.getAmount());
+                                            is.setAmount(0);
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            cleanedItem.setAmount(cleanedItem.getMaxStackSize());
+                                            is.setAmount(is.getAmount() - slotLeft);
+                                            continue;
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                            
+                            if(is.getAmount() != 0)
+                            {
+                                cleanedItems.add(is);
+                                auctionDataManager.addLots(cleanedItems);
+                            }
+                            
+                            auctionCount++;
+                            
                         }
+                        
                     }
                 }
             }

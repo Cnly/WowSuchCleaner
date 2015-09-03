@@ -15,6 +15,7 @@ public class ActiveCleaningConfig
     
     private boolean enabled;
     private boolean auction;
+    private boolean autoMerge;
     private int intervalInSeconds;
     private List<ItemStack> preservedItems;
     private List<Integer> notifyTimes;
@@ -35,6 +36,7 @@ public class ActiveCleaningConfig
         
         this.enabled = config.getBoolean("cleaning.active.enabled");
         this.auction = config.getBoolean("cleaning.active.auction");
+        this.autoMerge = config.getBoolean("cleaning.active.autoMerge");
         this.intervalInSeconds = config.getInt("cleaning.active.intervalInSeconds");
         
         List<String> tempPreservedItems = config.getStringList("cleaning.active.preservedItems");
@@ -73,6 +75,11 @@ public class ActiveCleaningConfig
     public boolean isAuction()
     {
         return auction;
+    }
+    
+    public boolean isAutoMerge()
+    {
+        return autoMerge;
     }
 
     public int getIntervalInSeconds()

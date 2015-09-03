@@ -44,6 +44,8 @@ cleaning:
     # Whether to enable active cleaning
     auction: true
     # Whether to enable auction function for items cleaned by active cleaning
+    autoMerge: false
+    # Whether to merge same items into one item automatically
     intervalInSeconds: 600
     # The interval in seconds of active cleaning
     preservedItems:
