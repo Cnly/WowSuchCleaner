@@ -42,7 +42,7 @@ public class ActiveCleaner extends BukkitRunnable
             
             int count = 0;
             int auctionCount = 0;
-            ArrayList<ItemStack> cleanedItems = new ArrayList<>();
+            ArrayList<ItemStack> cleanedItems = isAuction ? new ArrayList<ItemStack>() : null;
             
             for(World w : Bukkit.getWorlds())
             {
