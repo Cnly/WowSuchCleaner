@@ -89,7 +89,6 @@ public class ActiveCleaner extends BukkitRunnable
                             if(is.getAmount() != 0)
                             {
                                 cleanedItems.add(is);
-                                auctionDataManager.addLots(cleanedItems);
                             }
                             
                             auctionCount++;
@@ -99,6 +98,8 @@ public class ActiveCleaner extends BukkitRunnable
                     }
                 }
             }
+            
+            if(isAuction) auctionDataManager.addLots(cleanedItems);
             
             Bukkit.broadcastMessage(localeManager.getLocalizedString("cleaning.cleanNotify")
                     .replace("{count}", String.valueOf(count))

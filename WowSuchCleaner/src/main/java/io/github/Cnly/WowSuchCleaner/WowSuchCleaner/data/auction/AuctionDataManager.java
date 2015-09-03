@@ -126,6 +126,28 @@ public class AuctionDataManager
         return true;
     }
     
+    public void addLots(List<ItemStack> items)
+    {
+        
+        for(ItemStack item : items)
+        {
+            
+            AuctionableItem ai = auctionConfig.getAuctionableItemConfig(item);
+            
+            if(null == ai) continue;
+            
+            double startingPrice = (((int)(ai.getStartingPrice() * 100)) * item.getAmount()) / 100D;
+            double minimumIncrement = (((int)(ai.getMinimumIncrement() * 100)) * item.getAmount()) / 100D;
+            
+            Lot lot = new Lot(item, false, startingPrice, null, null, -1, minimumIncrement, System.currentTimeMillis() + ai.getPreserveTimeInSeconds() * 1000, ai.getAuctionDurationInSeconds() * 1000);
+            lots.add(lot);
+            
+        }
+        
+        LotShowcase.updateAll();
+        
+    }
+    
     public boolean removeLot(Lot lot)
     {
         boolean success = lots.remove(lot);
