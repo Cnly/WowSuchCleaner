@@ -40,9 +40,8 @@ public class ActiveCleaner extends BukkitRunnable
         if(0 == secondsRemaining)
         {
             
-            int count = 0;
-            int auctionCount = 0;
-            ArrayList<ItemStack> cleanedItems = isAuction ? new ArrayList<ItemStack>() : null;
+            ArrayList<Item> itemsToClean = new ArrayList<>();
+            ArrayList<ItemStack> itemsToAuction = isAuction ? new ArrayList<ItemStack>() : null;
             
             for(World w : Bukkit.getWorlds())
             {
@@ -54,15 +53,14 @@ public class ActiveCleaner extends BukkitRunnable
                         Item item = (Item)e;
                         ItemStack is = item.getItemStack();
                         if(activeCleaningConfig.isPreservedItem(is)) continue;
-                        item.remove();
-                        count++;
+                        itemsToClean.add(item);
                         
                         if(isAuction)
                         {
                             
                             if(activeCleaningConfig.isAutoMerge())
                             {
-                                for(ItemStack cleanedItem : cleanedItems)
+                                for(ItemStack cleanedItem : itemsToAuction)
                                 {
                                     if(cleanedItem.isSimilar(is) && cleanedItem.getAmount() < cleanedItem.getMaxStackSize())
                                     {
@@ -88,10 +86,8 @@ public class ActiveCleaner extends BukkitRunnable
                             
                             if(is.getAmount() != 0)
                             {
-                                cleanedItems.add(is);
+                                itemsToAuction.add(is);
                             }
-                            
-                            auctionCount++;
                             
                         }
                         
@@ -99,11 +95,24 @@ public class ActiveCleaner extends BukkitRunnable
                 }
             }
             
-            if(isAuction) auctionDataManager.addLots(cleanedItems);
+            ItemPreCleanEvent ipce = new ItemPreCleanEvent(itemsToClean, itemsToAuction);
+            Bukkit.getPluginManager().callEvent(ipce);
             
-            Bukkit.broadcastMessage(localeManager.getLocalizedString("cleaning.cleanNotify")
-                    .replace("{count}", String.valueOf(count))
-                    .replace("{auctionCount}", String.valueOf(auctionCount)));
+            if(!ipce.isCancelled())
+            {
+                
+                for(Item item : ipce.getItemsToClean())
+                {
+                    item.remove();
+                }
+                
+                if(isAuction) auctionDataManager.addLots(ipce.getItemsToAuction());
+                
+                Bukkit.broadcastMessage(localeManager.getLocalizedString("cleaning.cleanNotify")
+                        .replace("{count}", String.valueOf(ipce.getItemsToClean().size()))
+                        .replace("{auctionCount}", String.valueOf(isAuction ? ipce.getItemsToAuction().size() : 0)));
+                
+            }
             
             secondsRemaining = activeCleaningConfig.getIntervalInSeconds();
             
