@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * The event called before the active cleaner cleans.
- *
  */
 public class ItemPreCleanEvent extends Event implements Cancellable
 {
