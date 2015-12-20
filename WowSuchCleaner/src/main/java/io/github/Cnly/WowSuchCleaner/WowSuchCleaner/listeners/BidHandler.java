@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -43,8 +44,8 @@ public class BidHandler implements Listener
         e.setCancelled(true);
         
         boolean anonymous = false;
-        String msg = e.getMessage();
-        
+        String msg = ChatColor.stripColor(e.getMessage());
+
         if(msg.length() == 0) return;
         if(msg.equalsIgnoreCase("cancel"))
         {
