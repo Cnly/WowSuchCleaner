@@ -115,7 +115,11 @@ public class Main extends JavaPlugin
         LotOperationMenu.closeAll();
         
         auctionDataManager.shutdownGracefully();
-        
+
+        CommandUtils.unregister("wowsuchcleaner");
+        CommandUtils.unregister("wsc");
+        CommandUtils.unregister(this.getName() + ":wowsuchcleaner");
+        CommandUtils.unregister(this.getName() + ":wsc");
         HandlerList.unregisterAll(this);
         Bukkit.getScheduler().cancelTasks(this);
         
