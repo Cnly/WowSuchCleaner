@@ -16,7 +16,14 @@ public class DefaultItem extends AuctionableItem
     @Override
     public boolean isTheSameItem(ItemStack item)
     {
-        return true;
+        if(item.getType() == Material.AIR)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
     
 }
