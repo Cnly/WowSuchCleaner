@@ -11,7 +11,7 @@ machine:
     - unzip busyinv.zip
     - mvn clean install:
         pwd: $HOME/BusyInv-master
+  post:
+    - cp target/WowSuchCleaner-*.jar $CIRCLE_ARTIFACTS
 general:
   build_dir: WowSuchCleaner
-  artifacts:
-    - "target/WowSuchCleaner-*.jar"
