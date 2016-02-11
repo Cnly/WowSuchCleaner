@@ -99,7 +99,7 @@ public class Main extends JavaPlugin
         
         if(activeCleaningConfig.isEnabled())
         {
-            new ActiveCleaner().runTaskTimer(this, 20L, 20L);
+            new ActiveCleaner().start();
         }
         
         // <<<<< Tasks <<<<<
