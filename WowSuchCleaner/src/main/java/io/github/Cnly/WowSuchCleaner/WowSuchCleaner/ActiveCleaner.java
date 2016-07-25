@@ -22,6 +22,7 @@ public class ActiveCleaner
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
     
     private boolean isAuction = activeCleaningConfig.isAuction();
+    private int generousDelayInTicks = activeCleaningConfig.getGenerousDelayInTicks();
     
     private Timer timer = new Timer(main, activeCleaningConfig.getIntervalInSeconds(), true, new Timer.TimerListener()
     {
@@ -72,7 +73,8 @@ public class ActiveCleaner
                 {
                     if(e instanceof Item)
                     {
-                
+                        
+                        if(e.getTicksLived() < generousDelayInTicks) continue;
                         Item item = (Item)e;
                         ItemStack is = item.getItemStack();
                         if(activeCleaningConfig.isPreservedItem(is)) continue;

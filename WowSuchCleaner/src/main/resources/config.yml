@@ -48,6 +48,8 @@ cleaning:
     # Whether to merge same items into one item automatically
     intervalInSeconds: 600
     # The interval in seconds of active cleaning
+    generousDelayInSeconds: 0
+    # Items will not be removed until they've lived for ___ second(s).
     preservedItems:
     # These items are preserved from active cleaning
       - '2'
