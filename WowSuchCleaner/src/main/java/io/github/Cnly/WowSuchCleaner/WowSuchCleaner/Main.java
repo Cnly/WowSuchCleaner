@@ -50,6 +50,7 @@ public class Main extends JavaPlugin
         if(!setupEconomy())
         {
             getLogger().severe("Unable to setup economy support!");
+            this.setEnabled(false);
             return;
         }
         
