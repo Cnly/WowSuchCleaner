@@ -15,6 +15,7 @@ public class AuctionConfig
     
     private double chargePercentPerBid;
     private double minimumChargePerBid;
+    private String transferAccount;
     
     private int bidIntervalInSeconds;
     
@@ -97,6 +98,7 @@ public class AuctionConfig
         
         this.chargePercentPerBid = this.config.getDouble("auction.charge.chargePercentPerBid");
         this.minimumChargePerBid = this.config.getDouble("auction.charge.minimumChargePerBid");
+        this.transferAccount = this.config.getString("auction.transferAccount");
         
         this.bidIntervalInSeconds = this.config.getInt("auction.bid.intervalInSeconds");
         
@@ -130,6 +132,11 @@ public class AuctionConfig
     public double getMinimumChargePerBid()
     {
         return minimumChargePerBid;
+    }
+    
+    public String getTransferAccount()
+    {
+        return transferAccount;
     }
 
     public int getBidIntervalInSeconds()

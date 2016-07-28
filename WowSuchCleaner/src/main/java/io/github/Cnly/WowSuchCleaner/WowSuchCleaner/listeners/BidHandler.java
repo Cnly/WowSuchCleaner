@@ -105,8 +105,8 @@ public class BidHandler implements Listener
             return;
         }
         
+        auctionDataManager.addToTransferAccount(charge);
         auctionDataManager.bid(p, anonymous, lot, bid);
-        
         auctionDataManager.setLastBid(p, lot, System.currentTimeMillis());
         
         callback.onBidSuccess(p, bid, anonymous);

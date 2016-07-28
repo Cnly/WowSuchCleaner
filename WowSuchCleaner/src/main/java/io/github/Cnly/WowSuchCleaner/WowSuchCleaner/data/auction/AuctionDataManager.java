@@ -422,10 +422,12 @@ public class AuctionDataManager
         
         if(buyer != null) buyer.sendMessage(localeManager.getLocalizedString("ui.hammerBuyer"));
         
-        Map<UUID, Double> deposit = getDeposit(lot);
-        deposit.remove(buyerUuid);
+        Map<UUID, Double> depositMap = getDeposit(lot);
+        double buyerDeposit = depositMap.get(buyerUuid);
+        addToTransferAccount(buyerDeposit);
+        depositMap.remove(buyerUuid);
         
-        for(Entry<UUID, Double> e : deposit.entrySet())
+        for(Entry<UUID, Double> e : depositMap.entrySet())
         {
             
             Player p = CompatUtils.getPlayer(e.getKey());
@@ -530,6 +532,14 @@ public class AuctionDataManager
             
         }
         
+    }
+    
+    public void addToTransferAccount(Double amount)
+    {
+        if(auctionConfig.getTransferAccount().length() != 0)
+        {
+            Main.economy.depositPlayer(auctionConfig.getTransferAccount(), amount);
+        }
     }
     
 }
