@@ -20,6 +20,7 @@ public class ActiveCleaningConfig
     private int generousDelayInTicks; // Tick conversion for the config field generousDelayInSeconds
     private List<ItemStack> preservedItems;
     private List<Integer> notifyTimes;
+    private boolean clickableCleaningNotification;
     
     private Main main = Main.getInstance();
     private FileConfiguration config = main.getConfig();
@@ -40,6 +41,7 @@ public class ActiveCleaningConfig
         this.autoMerge = config.getBoolean("cleaning.active.autoMerge");
         this.intervalInSeconds = config.getInt("cleaning.active.intervalInSeconds");
         this.generousDelayInTicks = config.getInt("cleaning.active.generousDelayInSeconds") * 20;
+        this.clickableCleaningNotification = this.config.getBoolean("cleaning.active.clickableCleaningNotification");
         
         List<String> tempPreservedItems = config.getStringList("cleaning.active.preservedItems");
         for(String s : tempPreservedItems)
@@ -102,6 +104,11 @@ public class ActiveCleaningConfig
     public List<Integer> getNotifyTimes()
     {
         return Collections.unmodifiableList(notifyTimes);
+    }
+    
+    public boolean isClickableCleaningNotification()
+    {
+        return clickableCleaningNotification;
     }
     
 }

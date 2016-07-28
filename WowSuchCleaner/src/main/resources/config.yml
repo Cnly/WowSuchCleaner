@@ -59,6 +59,8 @@ cleaning:
       - 60
       - 30
       - 10
+    clickableCleaningNotification: false
+    # Enabling will make cleaning notifications clickable, which will open the showcase.
   passive:
   # passive cleaning means cleaning by vanilla Minecraft
     auction: true

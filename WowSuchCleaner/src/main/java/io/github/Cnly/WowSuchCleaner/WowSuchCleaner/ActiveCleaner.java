@@ -132,10 +132,12 @@ public class ActiveCleaner
                 }
         
                 if(isAuction) auctionDataManager.addLots(ipce.getItemsToAuction());
-        
-                Bukkit.broadcastMessage(localeManager.getLocalizedString("cleaning.cleanNotify")
-                                                     .replace("{count}", String.valueOf(ipce.getItemsToClean().size()))
-                                                     .replace("{auctionCount}", String.valueOf(isAuction ? ipce.getItemsToAuction().size() : 0)));
+    
+                String message = localeManager.getLocalizedString("cleaning.cleanNotify")
+                                              .replace("{count}", String.valueOf(ipce.getItemsToClean().size()))
+                                              .replace("{auctionCount}", String.valueOf(
+                                                      isAuction ? ipce.getItemsToAuction().size() : 0));
+                Utils.broadcastCleaningNotification(message, activeCleaningConfig.isClickableCleaningNotification());
         
             }
             
