@@ -6,6 +6,10 @@ auction:
     chargePercentPerBid: 1
     # From 0 to 100
     minimumChargePerBid: 1
+  transferAccount: ''
+  # Specify a player economy account into which money from auction is all transferred
+  # e.g. transferAccount: Cnly
+  # Set to '' to disable
   useAsBlacklist: false
   # Change to true will use the following list as blacklist
   # You probably need a 'DEFAULT' item AT THE END OF THE LIST if you're using blacklist mode
