@@ -1,0 +1,57 @@
+#WowSuchCleaner - german translation by HoLiSchit - have fun!
+cleaning:
+  preNotify: '&cItems am Boden werden in &e{time} &cSekunden entfernt!'
+  cleanNotify: '&e{count}&c Items wurden entfernt, davon stehen &e{auctionCount}&c zur Auktion!'
+ 
+ui:
+  title: 'Angebote (Klicken zum bieten)'
+  clickToRefresh: '&r&bAktualisieren(Q)'
+  prevPageButton: '&r&bVorherige Seite: &a{page}'
+  nextPageButton: '&r&bNächste Seite: &a{page}'
+  currentPage: '&r&bAktuelle Seite: &a{page}'
+  currentPrice: '&r&bAktueller Preis: &a{price} {currency}'
+  lastBid: '&r&bLetztes Gebot von &a{player}&b | Gebot: &a{price} {currency}'
+  minimumIncrement: '&r&bMindestgebot: &a{price} {currency}'
+  bidUnstarted: '&r&aBisher keine Gebote'
+  timeRemaining: '&r&bZeit bis Auktionsende in Sekunden: &a{time}'
+  anonymous: '&9[Anonym]'
+ 
+  lotOperationMenu: Auktionssteuerung
+  forcePurchase: '&6Kauf erzwingen'
+  forcePurchaseLore: '&6Angebot sofort zum vollen Preis kaufen'
+  removeLot: '&cAngebot beenden'
+  removeLotLore: '&cAngebot abbrechen und ins Inventar senden'
+  removeLotLore2: '&cShift + klick zum entfernen und löschen'
+  fullInventory: '&cDein Inventar ist voll.'
+  back: '&aZurück'
+ 
+  bidPrompt: "&bUm zu bieten gib direkt hier in den Chat die Höhe deines Gebots ein. Um abzubrechen verwende '&acancel&b'. Um Anonym zu bieten setze ein '&aa&b' vor dein Gebot."
+  chargePerBid: '&bCharge per increment is &a{chargePercent}%&b and the minimum charge is &a{minimumCharge} {currency}.'
+  wrongBidFormat: '&cFalsches Gebotsformat.'
+  bidCancelled: '&cGebot abgebrochen.'
+  bidTooLow: '&cDie Mindesterhöhung beträgt: &e{minimumIncrement} {currency}'
+  balanceNotEnough: "&cYou don't have enough money. Your balance is: &e{balance} {currency}"
+  bidTooFast: "&cDu bietest zu schnell - bitte warte noch &e{time} Sekunden."
+  sucessfulBid: '&aGebot abgegeben. Bid successfully. Preissteigerung: &b{price} {currency}&a | Gebühr: &b{charge} {currency}'
+  fullVault: '&cDein Lager ist jetzt voll. Bitte beachte - wenn du das erste Mal auf etwas bietest belegt es einen Slot im Lager.'
+  itemAlreadySold: '&cDieser Gegenstand wurde verkauft.'
+ 
+  hammerBuyer: "&aEin Gegenstand auf den du geboten hast gehört jetzt dir. Schau in dein Inventar oder Lager."
+  hammerOthers: "&aEin Gegenstand den du ersteigern wolltest wurde verkauft. Dein Gebot wurde zurückgezahlt."
+ 
+  vault: Lager - klicken zum abholen
+ 
+commands:
+  playerNeeded: '&cDieser Befehl kann nur von einem Spieler ausgeführt werden.'
+  noPermission: '&cBerechtigung fehlt.'
+  auction:
+    help: '&b{usage} - verkauft den Gegenstand in deiner Hand.'
+    notAuctionable: '&cDieser Gegenstand kann nicht verkauft werden!'
+    success: '&aGegenstand steht jetzt zum Verkauf.'
+  showcase:
+    help: '&b{usage} - Öffnet die Angebote.'
+  vault:
+    help: '&b{usage} - Öffnet dein Lager.'
+  reload:
+    help: '&b{usage} - Lädt das Plugin neu.'
+    reloaded: '&aPlugin neu geladen.'

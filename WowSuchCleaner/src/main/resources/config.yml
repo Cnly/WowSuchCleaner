@@ -65,4 +65,4 @@ cleaning:
     # Whether to enable auction function for items cleaned by passive cleaning
     
 locale: en_UK
-# Locale files included by default: en_UK, zh_CN
+# Locale files included by default: en_UK, zh_CN, de_DE
