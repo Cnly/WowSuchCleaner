@@ -19,7 +19,7 @@ public class Utils
             for(Player p : CompatUtils.getOnlinePlayers())
             {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format(
-                        "tellraw %s {\"text\":\"%s\",\"extra\":[{\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/wsc showcase\"}}]}",
+                        "tellraw %s {\"text\":\"%s\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/wsc showcase\"}}",
                         p.getName(), msg));
             }
         }
