@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners.BidHandler;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -29,6 +30,7 @@ public class AuctionDataManager
     private Main main = Main.getInstance();
     private AuctionConfig auctionConfig = main.getAuctionConfig();
     private ILocaleManager localeManager = main.getLocaleManager();
+    private BidHandler bidHandler;
     
     private CrafterYamlConfigManager data = new CrafterYamlConfigManager(new File(main.getDataFolder(), "auctionData.yml"), false, main)
     {
@@ -53,6 +55,11 @@ public class AuctionDataManager
         data.setAutoSaveInterval(60);
         data.setAsynchronousAutoSave(true);
         new LotMaintainTask().runTaskTimer(main, 20L, 20L);
+    }
+    
+    public void setBidHandler(BidHandler bidHandler)
+    {
+        this.bidHandler = bidHandler;
     }
     
     public void shutdownGracefully()
@@ -152,9 +159,21 @@ public class AuctionDataManager
     {
         boolean success = lots.remove(lot);
         removeFromBackend(lot);
+        bidHandler.cancelInvalidBidState(lot);
         LotShowcase.updateAll();
         LotOperationMenu.updateAll();
         return success;
+    }
+    
+    public void removeLots(List<Lot> lots)
+    {
+        for(Lot l : lots)
+        {
+            removeFromBackend(l);
+        }
+        bidHandler.cancelInvalidBidStates(lots);
+        LotShowcase.updateAll();
+        LotOperationMenu.updateAll();
     }
     
     public List<Lot> getLots()
@@ -404,9 +423,8 @@ public class AuctionDataManager
         }
     }
     
-    public void hammer(Lot lot)
+    private void hammer0(Lot lot)
     {
-        
         UUID buyerUuid = lot.getLastBidPlayerUuid();
         Player buyer = CompatUtils.getPlayer(buyerUuid);
         if(null == buyer || buyer.getInventory().firstEmpty() == -1)
@@ -445,9 +463,23 @@ public class AuctionDataManager
             unoccupyVault(e.getKey());
             
         }
-        
+    }
+    
+    public void hammer(Lot lot)
+    {
+        hammer0(lot);
         removeLot(lot);
-        
+        bidHandler.cancelInvalidBidState(lot);
+    }
+    
+    public void hammerLots(List<Lot> lots)
+    {
+        for(Lot l : lots)
+        {
+            hammer0(l);
+        }
+        removeLots(lots);
+        bidHandler.cancelInvalidBidStates(lots);
     }
     
     private void load()

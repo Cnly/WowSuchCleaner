@@ -1,13 +1,13 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners;
 
 import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
+import io.github.Cnly.Crafter.Crafter.utils.CompatUtils;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.Lot;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -28,6 +28,11 @@ public class BidHandler implements Listener
     private AuctionConfig auctionConfig = main.getAuctionConfig();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
     
+    public BidHandler()
+    {
+        auctionDataManager.setBidHandler(this);
+    }
+    
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void handleBid(AsyncPlayerChatEvent e)
     {
@@ -42,16 +47,30 @@ public class BidHandler implements Listener
         Lot lot = arg.getLot();
         
         e.setCancelled(true);
+    
+        if(!auctionDataManager.hasLot(lot))
+        {
+            if(lot.isStarted())
+            {
+                p.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
+                cancelBidRequest(p);
+                return;
+            }
+            else
+            {
+                p.sendMessage(localeManager.getLocalizedString("ui.itemNoLongerAvailable"));
+                cancelBidRequest(p);
+                return;
+            }
+        }
         
         boolean anonymous = false;
         String msg = ChatColor.stripColor(e.getMessage());
-
+    
         if(msg.length() == 0) return;
         if(msg.equalsIgnoreCase("cancel"))
         {
-            p.sendMessage(localeManager.getLocalizedString("ui.bidCancelled"));
-            callback.onCancel(p);
-            biddingPlayers.remove(uuid);
+            cancelBidRequest(p);
             return;
         }
         if(msg.startsWith("a"))
@@ -165,9 +184,74 @@ public class BidHandler implements Listener
         
     }
     
+    public void cancelInvalidBidState(Lot lot)
+    {
+        for(Map.Entry<UUID, BidArgument> e : biddingPlayers.entrySet())
+        {
+            if(!e.getValue().getLot().equals(lot))
+            {
+                continue;
+            }
+            cancelBidRequest(e.getKey());
+        }
+    }
+    
+    public void cancelInvalidBidStates(List<Lot> lots)
+    {
+        HashSet<UUID> lotUuidSet = new HashSet<>();
+        for(Lot l : lots)
+        {
+            lotUuidSet.add(l.getUuid());
+        }
+        for(Map.Entry<UUID, BidArgument> e: biddingPlayers.entrySet())
+        {
+            UUID lotUuid = e.getValue().getLot().getUuid();
+            if(!lotUuidSet.contains(lotUuid))
+            {
+                cancelBidRequest(e.getKey());
+            }
+        }
+    }
+    
     public void cancelBidRequest(Player p)
     {
-        biddingPlayers.remove(p.getUniqueId());
+        UUID uuid = p.getUniqueId();
+        BidArgument arg = biddingPlayers.get(uuid);
+        if(arg == null) return;
+        BidCallback callback = arg.getCallback();
+        if(arg.getLot().isStarted())
+        {
+            p.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
+        }
+        else
+        {
+            p.sendMessage(localeManager.getLocalizedString("ui.itemNoLongerAvailable"));
+        }
+        p.sendMessage(localeManager.getLocalizedString("ui.bidCancelled"));
+        callback.onCancel(p);
+        biddingPlayers.remove(uuid);
+    }
+    
+    public void cancelBidRequest(UUID uuid)
+    {
+        BidArgument arg = biddingPlayers.get(uuid);
+        if(arg == null) return;
+        Player p = CompatUtils.getPlayer(uuid);
+        if(null != p)
+        {
+            BidCallback callback = arg.getCallback();
+            if(arg.getLot().isStarted())
+            {
+                p.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
+            }
+            else
+            {
+                p.sendMessage(localeManager.getLocalizedString("ui.itemNoLongerAvailable"));
+            }
+            p.sendMessage(localeManager.getLocalizedString("ui.bidCancelled"));
+            callback.onCancel(p);
+        }
+        biddingPlayers.remove(uuid);
     }
     
     public static interface BidCallback

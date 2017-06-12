@@ -34,6 +34,7 @@ ui:
   sucessfulBid: '&aBid successfully. Price Increment: &b{price} {currency}&a | Charge: &b{charge} {currency}'
   fullVault: '&cYour vault is full. Note that when you bid for an item for the first time, it uses a slot.'
   itemAlreadySold: '&cThis item has been sold.'
+  itemNoLongerAvailable: '&cThis item is no longer available.'
 
   hammerBuyer: "&aAn item you've bid for has become yours. See your inventory or vault."
   hammerOthers: "&aAn item you've bid for is now sold. Your deposit has been returned to you."

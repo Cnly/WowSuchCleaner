@@ -35,6 +35,7 @@ ui:
   sucessfulBid: '&aGebot abgegeben. Bid successfully. Preissteigerung: &b{price} {currency}&a | Gebühr: &b{charge} {currency}'
   fullVault: '&cDein Lager ist jetzt voll. Bitte beachte - wenn du das erste Mal auf etwas bietest belegt es einen Slot im Lager.'
   itemAlreadySold: '&cDieser Gegenstand wurde verkauft.'
+  itemNoLongerAvailable: '&cThis item is no longer available.'
  
   hammerBuyer: "&aEin Gegenstand auf den du geboten hast gehört jetzt dir. Schau in dein Inventar oder Lager."
   hammerOthers: "&aEin Gegenstand den du ersteigern wolltest wurde verkauft. Dein Gebot wurde zurückgezahlt."

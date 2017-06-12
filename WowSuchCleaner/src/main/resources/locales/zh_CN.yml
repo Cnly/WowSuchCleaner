@@ -34,6 +34,7 @@ ui:
   sucessfulBid: '&a出价成功。价格增幅: &b{price} {currency}&a | 手续费: &b{charge} {currency}'
   fullVault: '&c您的保险箱已满。注意：当您首次为一件拍卖品出价时，它将占用一个位置。'
   itemAlreadySold: '&c该物品已成交。'
+  itemNoLongerAvailable: '&c该物品已下架。'
 
   hammerBuyer: "&a您成功竞拍了一件商品，商品已发送至您的背包或保险柜。"
   hammerOthers: "&a您竞拍的商品已出售，您的竞拍款已退还到您的账户。"
