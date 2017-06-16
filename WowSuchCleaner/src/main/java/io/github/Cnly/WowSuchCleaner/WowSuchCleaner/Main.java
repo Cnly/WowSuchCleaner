@@ -62,7 +62,7 @@ public class Main extends JavaPlugin
         
         auctionConfig = new AuctionConfig();
         activeCleaningConfig = new ActiveCleaningConfig();
-        localeManager = new CrafterLocaleManager(getConfig().getString("locale"), new File(getDataFolder(), "locales"), true, this);
+        localeManager = new WSCLocaleManager(getConfig().getString("locale"), new File(getDataFolder(), "locales"), true, this);
         
         // <<<<< Config <<<<<
         
