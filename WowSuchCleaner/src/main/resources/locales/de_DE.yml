@@ -46,6 +46,30 @@ commands:
   playerNeeded: '&cDieser Befehl kann nur von einem Spieler ausgeführt werden.'
   noPermission: '&cBerechtigung fehlt.'
   auction:
+  region:
+    help: '&b{usage} - Zeigt alle Befehle für Regionen.'
+    emptyRegionName: '&cDie Region muss benannt werden.'
+    regionNameAlreadyExists: '&cEs existiert bereits eine Region mit diesem Namen'
+    emptyAuctionProfileName: '&cAuction profile cannot be empty.'
+    noSuchAuctionProfile: '&cAuction profile cannot be found with that profile name.'
+    emptyCleaningProfileName: '&cCleaning profile cannot be empty.'
+    noSuchCleaningProfile: '&cCleaning profile cannot be found with that profile name.'
+    create:
+      help: '&b{usage} - Create a region assigned with the given auction and cleaning config profile.'
+      settingModeEntered: "&bYou've entered region setting mode. Use mouse left and right to set two points to build a region."
+      settingModeExited: "&bYou've exited region setting mode."
+      pointSet: '&bSuccessfully set point {pointIndex}.'
+      regionBuilt: '&aRegion built.'
+      regionAreaAlreadyExists: '&cThere is already a region with the same area.'
+    createWorld:
+      help: '&b{usage} - Create a world region assigned with the given auction and cleaning config profile.'
+      success: '&aWeltregion erstellt.'
+      noSuchWorldWarning: "&cDiese Welt existiert nicht - Tippfehler?"
+      worldRegionAlreadyExists: '&cAuf dieser Welt existiert bereits eine Weltregion.'
+    remove:
+      help: '&b{usage} - Entfernt benannte Region.'
+      noSuchRegion: '&cUnbekannte Region.'
+      success: '&aRegion entfernt.'
     help: '&b{usage} - verkauft den Gegenstand in deiner Hand.'
     notAuctionable: '&cDieser Gegenstand kann nicht verkauft werden!'
     success: '&aGegenstand steht jetzt zum Verkauf.'

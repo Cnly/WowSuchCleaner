@@ -3,6 +3,8 @@ package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners;
 import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.Crafter.Crafter.utils.CompatUtils;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.RegionalConfigManager;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.SharedConfigManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.Lot;
@@ -25,7 +27,8 @@ public class BidHandler implements Listener
     private HashMap<UUID, BidArgument> biddingPlayers = new HashMap<>();
     private Main main = Main.getInstance();
     private ILocaleManager localeManager = main.getLocaleManager();
-    private AuctionConfig auctionConfig = main.getAuctionConfig();
+    private SharedConfigManager sharedConfigManager = main.getSharedConfigManager();
+    private RegionalConfigManager regionalConfigManager = main.getRegionalConfigManager();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
     
     public BidHandler()
@@ -99,8 +102,8 @@ public class BidHandler implements Listener
             return;
         }
         
-        double charge = bid * (auctionConfig.getChargePercentPerBid() / 100);
-        if(charge < auctionConfig.getMinimumChargePerBid()) charge = auctionConfig.getMinimumChargePerBid();
+        double charge = bid * (sharedConfigManager.getChargePercentPerBid() / 100);
+        if(charge < sharedConfigManager.getMinimumChargePerBid()) charge = sharedConfigManager.getMinimumChargePerBid();
         
         EconomyResponse er = null;
         if(auctionDataManager.hasBidBefore(p, lot))
@@ -118,8 +121,8 @@ public class BidHandler implements Listener
                     .replace("{balance}", String.valueOf(er.balance))
                     .replace("{currency}", Main.economy.currencyNamePlural()));
             p.sendMessage(localeManager.getLocalizedString("ui.chargePerBid")
-                    .replace("{chargePercent}", String.valueOf(auctionConfig.getChargePercentPerBid()))
-                    .replace("{minimumCharge}", String.valueOf(auctionConfig.getMinimumChargePerBid()))
+                    .replace("{chargePercent}", String.valueOf(sharedConfigManager.getChargePercentPerBid()))
+                    .replace("{minimumCharge}", String.valueOf(sharedConfigManager.getMinimumChargePerBid()))
                     .replace("{currency}", Main.economy.currencyNamePlural()));
             return;
         }
@@ -163,7 +166,7 @@ public class BidHandler implements Listener
         }
         
         long deltaSeconds = (System.currentTimeMillis() - auctionDataManager.getLastBid(p, lot)) / 1000;
-        long bidInterval = auctionConfig.getBidIntervalInSeconds();
+        long bidInterval = sharedConfigManager.getBidIntervalInSeconds();
         
         if(deltaSeconds < bidInterval)
         {
@@ -178,8 +181,8 @@ public class BidHandler implements Listener
         
         p.sendMessage(localeManager.getLocalizedString("ui.bidPrompt"));
         p.sendMessage(localeManager.getLocalizedString("ui.chargePerBid")
-                .replace("{chargePercent}", String.valueOf(auctionConfig.getChargePercentPerBid()))
-                .replace("{minimumCharge}", String.valueOf(auctionConfig.getMinimumChargePerBid()))
+                .replace("{chargePercent}", String.valueOf(sharedConfigManager.getChargePercentPerBid()))
+                .replace("{minimumCharge}", String.valueOf(sharedConfigManager.getMinimumChargePerBid()))
                 .replace("{currency}", Main.economy.currencyNamePlural()));
         
     }

@@ -1,10 +1,15 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction;
 
+import io.github.Cnly.Crafter.Crafter.utils.regions.boxregions.ApproximateBoxRegion;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,26 +18,16 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 public class AuctionConfig
 {
     
-    private double chargePercentPerBid;
-    private double minimumChargePerBid;
-    private String transferAccount;
-    
-    private int bidIntervalInSeconds;
-    
+    private String profileName;
     private boolean useAsBlacklist;
     private ArrayList<AuctionableItem> auctionableItems = new ArrayList<>();
-    
-    private boolean activeCleaningAuction;
-    private boolean passiveCleaningAuction;
-    
-    private int vaultCapacity;
-    private boolean vaultCapacityPermissionControl;
     
     private Main main = Main.getInstance();
     private FileConfiguration config = main.getConfig();
     
-    public AuctionConfig()
+    public AuctionConfig(String profileName)
     {
+        this.profileName = profileName;
         this.load();
     }
     
@@ -43,7 +38,7 @@ public class AuctionConfig
     
     public AuctionableItem getAuctionableItemConfig(ItemStack item)
     {
-        
+    
         if(!useAsBlacklist)
         {
             for(AuctionableItem ai : auctionableItems)
@@ -69,104 +64,28 @@ public class AuctionConfig
         return null;
     }
     
-    public int getVaultCapacity(Player p)
-    {
-        
-        int capacity = getVaultCapacity();
-        if(isVaultCapacityPermissionControl())
-        {
-            
-            for(PermissionAttachmentInfo pai : p.getEffectivePermissions())
-            {
-                String per = pai.getPermission();
-                
-                if(!per.toLowerCase().startsWith("wowsuchcleaner.vault.capacity.")) continue;
-                
-                String capacityString = per.split("\\.")[3];
-                capacity = Integer.parseInt(capacityString);
-                
-                continue;
-            }
-            
-        }
-        
-        return capacity;
-    }
-
     private void load()
     {
+    
+        ConfigurationSection baseSection = config.getConfigurationSection("auction.profiles." + profileName);
         
-        this.chargePercentPerBid = this.config.getDouble("auction.charge.chargePercentPerBid");
-        this.minimumChargePerBid = this.config.getDouble("auction.charge.minimumChargePerBid");
-        this.transferAccount = this.config.getString("auction.transferAccount");
-        
-        this.bidIntervalInSeconds = this.config.getInt("auction.bid.intervalInSeconds");
-        
-        this.useAsBlacklist = this.config.getBoolean("auction.useAsBlacklist");
-        for(Map<?, ?> map : this.config.getMapList("auction.auctionableItems"))
+        this.useAsBlacklist = baseSection.getBoolean("useAsBlacklist");
+    
+        for(Map<?, ?> map : baseSection.getMapList("auctionableItems"))
         {
             this.auctionableItems.add(AuctionableItem.fromMap(map));
         }
         
-        this.activeCleaningAuction = this.config.getBoolean("cleaning.active.auction");
-        this.passiveCleaningAuction = this.config.getBoolean("cleaning.passive.auction");
-        
-        if(this.config.isSet("vault.capacity.defaultCapacity"))
-        {
-            this.vaultCapacity = this.config.getInt("vault.capacity.defaultCapacity");
-        }
-        else
-        {
-            this.vaultCapacity = this.config.getInt("vault.capacity");
-        }
-        
-        this.vaultCapacityPermissionControl = this.config.getBoolean("vault.capacity.permissionControl");
-        
     }
     
-    public double getChargePercentPerBid()
+    public String getProfileName()
     {
-        return chargePercentPerBid;
-    }
-
-    public double getMinimumChargePerBid()
-    {
-        return minimumChargePerBid;
+        return profileName;
     }
     
-    public String getTransferAccount()
-    {
-        return transferAccount;
-    }
-
-    public int getBidIntervalInSeconds()
-    {
-        return bidIntervalInSeconds;
-    }
-
-    public boolean isActiveCleaningAuction()
-    {
-        return activeCleaningAuction;
-    }
-
     public boolean isUseAsBlacklist()
     {
         return useAsBlacklist;
     }
 
-    public boolean isPassiveCleaningAuction()
-    {
-        return passiveCleaningAuction;
-    }
-
-    public int getVaultCapacity()
-    {
-        return vaultCapacity;
-    }
-
-    public boolean isVaultCapacityPermissionControl()
-    {
-        return vaultCapacityPermissionControl;
-    }
-    
 }

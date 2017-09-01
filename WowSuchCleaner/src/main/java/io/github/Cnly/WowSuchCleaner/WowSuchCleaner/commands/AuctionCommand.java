@@ -33,7 +33,7 @@ public class AuctionCommand extends AbstractCrafterCommand
         Player p = (Player)sender;
         ItemStack item = p.getItemInHand();
         
-        if(!auctionDataManager.addLot(item))
+        if(!auctionDataManager.addLot(item, p.getLocation()))
         {
             p.sendMessage(localeManager.getLocalizedString("commands.auction.notAuctionable"));
         }

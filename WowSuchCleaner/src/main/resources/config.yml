@@ -10,28 +10,82 @@ auction:
   # Specify a player economy account into which money from auction is all transferred
   # e.g. transferAccount: Cnly
   # Set to '' to disable
-  useAsBlacklist: false
-  # Change to true will use the following list as blacklist
-  # You probably need a 'DEFAULT' item AT THE END OF THE LIST if you're using blacklist mode
-  # A 'DEFAULT' item is an OPTIONAL special item that acts like a wildcard
-  # Normally, a 'DEFAULT' item is put AT THE END OF THE LIST because the plugin find matching items orderly
-  # A 'DEFAULT' item could be used in non-blacklist mode too, representing those items that don't have specific settings
-  # To specify a 'DEFAULT' item, just set an item's ID to DEFAULT
-  auctionableItems:
-    - item: '4'
-      startingPrice: 0.98
-      minimumIncrement: 0.01
-      # The minimum price increment for per bid
-      preserveTimeInSeconds: 600
-      # The time for which the item should be in the showcase before bidding for this item is started
-      auctionDurationInSeconds: 300
-      # The time in which the item should be sold after bidding for this item has started
-    - item: DEFAULT
-      startingPrice: 1.00
-      minimumIncrement: 0.05
-      preserveTimeInSeconds: 600
-      auctionDurationInSeconds: 300
+  profiles:  # Add other profiles if you need. Remember to put 'default' AT THE BOTTOM of the list. Do not delete 'default'.
+    disable:  # This is a handy profile if you want to disable auctioning in a region.
+      useAsBlacklist: false
+      auctionableItems: []
+    default:
+      useAsBlacklist: false
+      # Change to true will use the following list as blacklist
+      # You probably need a 'DEFAULT' item AT THE END OF THE LIST if you're using blacklist mode
+      # A 'DEFAULT' item is an OPTIONAL special item that acts like a wildcard
+      # Normally, a 'DEFAULT' item is put AT THE END OF THE LIST because the plugin find matching items orderly
+      # A 'DEFAULT' item could be used in non-blacklist mode too, representing those items that don't have specific settings
+      # To specify a 'DEFAULT' item, just set an item's ID to DEFAULT
+      auctionableItems:
+        - item: '4'
+          startingPrice: 0.98
+          minimumIncrement: 0.01
+          # The minimum price increment for per bid
+          preserveTimeInSeconds: 600
+          # The time for which the item should be in the showcase before bidding for this item is started
+          auctionDurationInSeconds: 300
+          # The time in which the item should be sold after bidding for this item has started
+        - item: DEFAULT
+          startingPrice: 1.00
+          minimumIncrement: 0.05
+          preserveTimeInSeconds: 600
+          auctionDurationInSeconds: 300
       
+cleaning:
+  profiles:  # Add other profiles if you need. Remember to put 'default' AT THE BOTTOM of the list. Do not delete 'default'.
+    disable:  # This is a handy profile if you want to disable the functions in a region.
+      active:
+        enabled: false
+        auction: false
+        autoMerge: false
+        intervalInSeconds: 0
+        generousDelayInSeconds: 0
+        preservedItems: []
+        inRegionNotification: false
+        notify: []
+        clickableCleaningNotification: false
+      passive:
+        auction: false
+    default:
+      active:
+      # Active cleaning means cleaning by this plugin
+        enabled: false
+        # Whether to enable active cleaning
+        auction: true
+        # Whether to enable auction function for items cleaned by active cleaning
+        autoMerge: false
+        # Whether to merge same items into one item automatically
+        intervalInSeconds: 600
+        # The interval in seconds of active cleaning
+        generousDelayInSeconds: 0
+        # Items will not be removed until they've lived for ___ second(s).
+        preservedItems:
+        # These items are preserved from active cleaning
+          - '2'
+        inRegionNotification: true
+        # Set to true to only broadcast to players inside region.
+        # Or set to false to use server broadcast.
+        notify:
+        # Notify players when ___ seconds are left until active cleaning
+        # Notification messages can be overridden here by changing the text in quotation marks
+        # Leave it '' to use messages defined in locale file
+          - 300: ''
+          - 60: ''
+          - 30: ''
+          - 10: ''
+        clickableCleaningNotification: false
+        # Enabling will make cleaning notifications clickable, which will open the showcase.
+      passive:
+      # passive cleaning means cleaning by vanilla Minecraft
+        auction: true
+        # Whether to enable auction function for items cleaned by passive cleaning
+    
 vault:
   capacity:
     defaultCapacity: 9
@@ -40,35 +94,6 @@ vault:
     # Whether to allow players' permission to override the capacity setting
     # Permission example: WowSuchCleaner.vault.capacity.18
     # Note: Max capacity still applies.
-      
-cleaning:
-  active:
-  # Active cleaning means cleaning by this plugin
-    enabled: false
-    # Whether to enable active cleaning
-    auction: true
-    # Whether to enable auction function for items cleaned by active cleaning
-    autoMerge: false
-    # Whether to merge same items into one item automatically
-    intervalInSeconds: 600
-    # The interval in seconds of active cleaning
-    generousDelayInSeconds: 0
-    # Items will not be removed until they've lived for ___ second(s).
-    preservedItems:
-    # These items are preserved from active cleaning
-      - '2'
-    notify:
-    # Notify players when ___ seconds are left until active cleaning
-      - 300
-      - 60
-      - 30
-      - 10
-    clickableCleaningNotification: false
-    # Enabling will make cleaning notifications clickable, which will open the showcase.
-  passive:
-  # passive cleaning means cleaning by vanilla Minecraft
-    auction: true
-    # Whether to enable auction function for items cleaned by passive cleaning
     
 locale: en_UK
 # Locale files included by default: en_UK, zh_CN, de_DE

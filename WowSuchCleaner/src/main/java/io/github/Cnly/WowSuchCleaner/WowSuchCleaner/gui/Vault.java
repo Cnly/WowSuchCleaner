@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.SharedConfigManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
@@ -23,13 +24,16 @@ public class Vault extends ChestMenu
     
     private static HashSet<Player> opened = new HashSet<>();
     
-    private Main main = Main.getInstance();
-    private AuctionConfig auctionConfig = main.getAuctionConfig();
-    private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
+    private Main main;
+    private SharedConfigManager sharedConfigManager;
+    private AuctionDataManager auctionDataManager;
     
-    public Vault(ILocaleManager localeManager, AuctionConfig config)
+    public Vault(Main main)
     {
-        super(localeManager.getLocalizedString("ui.vault"), null, ChestSize.fit(config.getVaultCapacity()));
+        super(main.getLocaleManager().getLocalizedString("ui.vault"), null, ChestSize.fit(main.getSharedConfigManager().getVaultCapacity()));
+        this.main = main;
+        this.sharedConfigManager = main.getSharedConfigManager();
+        this.auctionDataManager = main.getAuctionDataManager();
     }
     
     @Override
@@ -39,7 +43,7 @@ public class Vault extends ChestMenu
         Map<UUID, ItemStack> itemMap = auctionDataManager.getVaultContents(p);
         int mapSize = itemMap.size();
         
-        int capacity = auctionConfig.getVaultCapacity(p);
+        int capacity = sharedConfigManager.getVaultCapacity(p);
         
         if(mapSize > capacity)
         {

@@ -44,6 +44,30 @@ ui:
 commands:
   playerNeeded: '&cThis command must be executed by a player.'
   noPermission: '&cPermission denied.'
+  region:
+    help: '&b{usage} - See region commands.'
+    emptyRegionName: '&cRegion name cannot be empty.'
+    regionNameAlreadyExists: '&cThere is already a region with that name.'
+    emptyAuctionProfileName: '&cAuction profile cannot be empty.'
+    noSuchAuctionProfile: '&cAuction profile cannot be found with that profile name.'
+    emptyCleaningProfileName: '&cCleaning profile cannot be empty.'
+    noSuchCleaningProfile: '&cCleaning profile cannot be found with that profile name.'
+    create:
+      help: '&b{usage} - Create a region assigned with the given auction and cleaning config profile.'
+      settingModeEntered: "&bYou've entered region setting mode. Use mouse left and right to set two points to build a region."
+      settingModeExited: "&bYou've exited region setting mode."
+      pointSet: '&bSuccessfully set point {pointIndex}.'
+      regionBuilt: '&aRegion built.'
+      regionAreaAlreadyExists: '&cThere is already a region with the same area.'
+    createWorld:
+      help: '&b{usage} - Create a world region assigned with the given auction and cleaning config profile.'
+      success: '&aWorld region created.'
+      noSuchWorldWarning: "&cWarning: The world you've specified doesn't exist."
+      worldRegionAlreadyExists: '&cThere is already a world region for the world specified.'
+    remove:
+      help: '&b{usage} - Remove a region with the name given.'
+      noSuchRegion: '&cNo such region.'
+      success: '&aRegion removed.'
   auction:
     help: '&b{usage} - Auction the item in your hand.'
     notAuctionable: '&cThe item in your hand is not auctionable.'

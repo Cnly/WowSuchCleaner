@@ -1,7 +1,10 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import io.github.Cnly.Crafter.Crafter.utils.regions.boxregions.ApproximateBoxRegion;
 import org.bukkit.entity.Item;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -14,33 +17,37 @@ import org.bukkit.inventory.ItemStack;
 public class ItemPreCleanEvent extends Event implements Cancellable
 {
     
-    private final List<Item> itemsToClean;
-    private final List<ItemStack> itemsToAuction;
+    private final Map<ApproximateBoxRegion, ArrayList<Item>> itemsToClean;
+    private final Map<ApproximateBoxRegion, ArrayList<Item>> itemsToAuction;
     private boolean cancelled = false;
 
-    public ItemPreCleanEvent(List<Item> itemsToClean, List<ItemStack> itemsToAuction)
+    public ItemPreCleanEvent(Map<ApproximateBoxRegion, ArrayList<Item>> itemsToClean, Map<ApproximateBoxRegion, ArrayList<Item>> itemsToAuction)
     {
         this.itemsToClean = itemsToClean;
         this.itemsToAuction = itemsToAuction;
     }
 
     /**
-     * Gets the list of item entities to clean. This list will never be null.
+     * Gets the map list of item entities to clean. The result will never be null.<br>
+     * {@code ApproximateBoxRegion} is a class from {@code Crafter} the library by me. In this plugin,
+     * region objects are unique.
      * 
-     * @return The list of item entities to clean.
+     * @return The map list of item entities to clean.
      */
-    public List<Item> getItemsToClean()
+    public Map<ApproximateBoxRegion, ArrayList<Item>> getItemsToClean()
     {
         return itemsToClean;
     }
     
     /**
-     * Gets the list of items to auction. The list can be null if
-     * cleaning.active.auction in config.yml is set to false.
+     * Gets the map list of item entities to auction. The result can be null if
+     * cleaning.&lt;profileName&gt;.active.auction in config.yml is set to false.<br>
+     * {@code ApproximateBoxRegion} is a class from {@code Crafter} the library by me. In this plugin,
+     * region objects are unique.
      * 
-     * @return The list of items to auction
+     * @return The map list of items to auction
      */
-    public List<ItemStack> getItemsToAuction()
+    public Map<ApproximateBoxRegion, ArrayList<Item>> getItemsToAuction()
     {
         return itemsToAuction;
     }

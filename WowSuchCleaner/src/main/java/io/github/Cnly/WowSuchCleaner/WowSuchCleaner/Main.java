@@ -11,8 +11,11 @@ import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.AuctionCommand;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.ReloadCommand;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.ShowcaseCommand;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.VaultCommand;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.activecleaning.ActiveCleaningConfig;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.region.RegionCreateCommand;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.region.RegionCreateWorldCommand;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.commands.region.RegionRemoveCommand;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.RegionalConfigManager;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.SharedConfigManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotOperationMenu;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotShowcase;
@@ -30,13 +33,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin
 {
     
-    private AuctionConfig auctionConfig;
-    private ActiveCleaningConfig activeCleaningConfig;
+    private SharedConfigManager sharedConfigManager;
+    private RegionalConfigManager regionalConfigManager;
     private CrafterLocaleManager localeManager;
     
     private AuctionDataManager auctionDataManager;
     
     private BidHandler bidHandler;
+    
+    private ActiveCleaner activeCleaner;
     
     private static Main instance;
     public static Economy economy = null;
@@ -60,9 +65,9 @@ public class Main extends JavaPlugin
         
         saveDefaultConfig();
         
-        auctionConfig = new AuctionConfig();
-        activeCleaningConfig = new ActiveCleaningConfig();
         localeManager = new WSCLocaleManager(getConfig().getString("locale"), new File(getDataFolder(), "locales"), true, this);
+        sharedConfigManager = new SharedConfigManager();
+        regionalConfigManager = new RegionalConfigManager();
         
         // <<<<< Config <<<<<
         
@@ -72,25 +77,9 @@ public class Main extends JavaPlugin
         
         // <<<<< Data <<<<<
         
-        // >>>>> Commands >>>>>
-        
-        CrafterMainCommand mainCommand = new CrafterMainCommand(this);
-        mainCommand.addSubcommand(new AuctionCommand());
-        mainCommand.addSubcommand(new ShowcaseCommand());
-        mainCommand.addSubcommand(new VaultCommand());
-        mainCommand.addSubcommand(new ReloadCommand());
-        
-        CommandUtils.register(this, "wowsuchcleaner", mainCommand, "wsc");
-        
-        // <<<<< Commands <<<<<
-        
         // >>>>> Listeners >>>>>
         
-        if(auctionConfig.isPassiveCleaningAuction())
-        {
-            getServer().getPluginManager().registerEvents(new PassiveCleaningItemListener(), this);
-        }
-        
+        getServer().getPluginManager().registerEvents(new PassiveCleaningItemListener(), this);
         getServer().getPluginManager().registerEvents(bidHandler = new BidHandler(), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         
@@ -98,12 +87,31 @@ public class Main extends JavaPlugin
         
         // >>>>> Tasks >>>>>
         
-        if(activeCleaningConfig.isEnabled())
-        {
-            new ActiveCleaner().start();
-        }
+        activeCleaner = new ActiveCleaner();
         
         // <<<<< Tasks <<<<<
+    
+        // >>>>> Commands >>>>>
+    
+        CrafterMainCommand regionMainCommand = new CrafterMainCommand();
+        regionMainCommand
+                .setHelp(localeManager.getLocalizedString("commands.region.help").replace("{usage}", "/wsc region"))
+                .setAction("region")
+                .setArgumentOffset(1);
+        regionMainCommand.addSubcommand(new RegionCreateCommand());
+        regionMainCommand.addSubcommand(new RegionCreateWorldCommand());
+        regionMainCommand.addSubcommand(new RegionRemoveCommand());
+    
+        CrafterMainCommand mainCommand = new CrafterMainCommand(this);
+        mainCommand.addSubcommand(new AuctionCommand());
+        mainCommand.addSubcommand(new ShowcaseCommand());
+        mainCommand.addSubcommand(new VaultCommand());
+        mainCommand.addSubcommand(regionMainCommand);
+        mainCommand.addSubcommand(new ReloadCommand());
+    
+        CommandUtils.register(this, "wowsuchcleaner", mainCommand, "wsc");
+    
+        // <<<<< Commands <<<<<
         
     }
     
@@ -130,17 +138,17 @@ public class Main extends JavaPlugin
     {
         return instance;
     }
-
-    public AuctionConfig getAuctionConfig()
+    
+    public SharedConfigManager getSharedConfigManager()
     {
-        return auctionConfig;
+        return sharedConfigManager;
     }
-
-    public ActiveCleaningConfig getActiveCleaningConfig()
+    
+    public RegionalConfigManager getRegionalConfigManager()
     {
-        return activeCleaningConfig;
+        return regionalConfigManager;
     }
-
+    
     public ILocaleManager getLocaleManager()
     {
         return localeManager;
@@ -155,7 +163,12 @@ public class Main extends JavaPlugin
     {
         return bidHandler;
     }
-
+    
+    public ActiveCleaner getActiveCleaner()
+    {
+        return activeCleaner;
+    }
+    
     private boolean setupEconomy()
     {
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);

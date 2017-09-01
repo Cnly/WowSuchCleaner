@@ -14,7 +14,6 @@ public class VaultCommand extends AbstractCrafterCommand
     
     private Main main = Main.getInstance();
     private ILocaleManager localeManager = main.getLocaleManager();
-    private AuctionConfig config = main.getAuctionConfig();
     
     public VaultCommand()
     {
@@ -29,7 +28,7 @@ public class VaultCommand extends AbstractCrafterCommand
     @Override
     protected void executeCommand(CommandSender sender, String[] args)
     {
-        new Vault(localeManager, config).openFor((Player)sender);
+        new Vault(main).openFor((Player)sender);
     }
     
 }

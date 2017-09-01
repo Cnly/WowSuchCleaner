@@ -19,8 +19,7 @@ public class PassiveCleaningItemListener implements Listener
     public void handlePassiveCleaning(ItemDespawnEvent e)
     {
         
-        ItemStack item = e.getEntity().getItemStack();
-        auctionDataManager.addLot(item);
+        auctionDataManager.addLot(e.getEntity());
         
     }
     

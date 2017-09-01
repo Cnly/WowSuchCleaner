@@ -1,0 +1,10 @@
+# This file stores the mappings between regions, auction config profiles and cleaning profiles.
+# The following is an example to disable cleaning & auctioning in the world named `thatWorld`. Uncomment to activate.
+# Note: If you're creating an entire-world region by editing this file, just set `region` to the world's name. The plugin
+# will do the conversion automatically.
+
+#regions:
+#  myRegionName:
+#    region: thatWorld
+#    auctionConfig: disable
+#    cleaningConfig: disable

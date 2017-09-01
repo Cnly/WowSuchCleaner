@@ -44,6 +44,30 @@ ui:
 commands:
   playerNeeded: '&c这个命令必须由玩家执行。'
   noPermission: '&c权限不足。'
+  region:
+    help: '&b{usage} - 查看区域命令。'
+    emptyRegionName: '&c区域名称不能为空。'
+    regionNameAlreadyExists: '&c已有同名区域。'
+    emptyAuctionProfileName: '&c拍卖设定档名称不能为空。'
+    noSuchAuctionProfile: '&c指定的拍卖设定档不存在。'
+    emptyCleaningProfileName: '&c清理设定档名称不能为空。'
+    noSuchCleaningProfile: '&c指定的清理设定档不存在。'
+    create:
+      help: '&b{usage} - 创建区域并设置相应的拍卖、清理设定档。'
+      settingModeEntered: "&b你已进入区域设置模式。使用鼠标左右键选择对角点来创建区域。"
+      settingModeExited: "&b你已退出区域设置模式。"
+      pointSet: '&b成功设置点{pointIndex}。'
+      regionBuilt: '&a区域已建立。'
+      regionAreaAlreadyExists: '&c已在相同位置创建过区域。'
+    createWorld:
+      help: '&b{usage} - 创建世界区域并设置相应的拍卖、清理设定档。'
+      success: '&a已创建世界区域。'
+      noSuchWorldWarning: "&c警告：指定的世界不存在。"
+      worldRegionAlreadyExists: '&c已为该世界创建过区域。'
+    remove:
+      help: '&b{usage} - 根据区域名称移除区域。'
+      noSuchRegion: '&c没有这个区域。'
+      success: '&a区域已移除。'
   auction:
     help: '&b{usage} - 拍卖您手中的道具。'
     notAuctionable: '&c您手上的道具无法进行拍卖。'

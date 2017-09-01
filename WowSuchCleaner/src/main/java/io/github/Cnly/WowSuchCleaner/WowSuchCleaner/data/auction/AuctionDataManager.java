@@ -9,8 +9,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.RegionalConfigManager;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.SharedConfigManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners.BidHandler;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,7 +32,8 @@ public class AuctionDataManager
 {
     
     private Main main = Main.getInstance();
-    private AuctionConfig auctionConfig = main.getAuctionConfig();
+    private SharedConfigManager sharedConfigManager = main.getSharedConfigManager();
+    private RegionalConfigManager regionalConfigManager = main.getRegionalConfigManager();
     private ILocaleManager localeManager = main.getLocaleManager();
     private BidHandler bidHandler;
     
@@ -115,10 +120,15 @@ public class AuctionDataManager
         return lots.contains(lot);
     }
     
-    public boolean addLot(ItemStack item)
+    public boolean addLot(Item item)
+    {
+        return addLot(item.getItemStack(), item.getLocation());
+    }
+    
+    public boolean addLot(ItemStack item, Location location)
     {
         
-        AuctionableItem ai = auctionConfig.getAuctionableItemConfig(item);
+        AuctionableItem ai = regionalConfigManager.getAuctionableItemConfig(item, location);
         
         if(null == ai) return false;
         
@@ -133,13 +143,14 @@ public class AuctionDataManager
         return true;
     }
     
-    public void addLots(List<ItemStack> items)
+    public void addLots(List<Item> items)
     {
         
-        for(ItemStack item : items)
+        for(Item itemEntity : items)
         {
-            
-            AuctionableItem ai = auctionConfig.getAuctionableItemConfig(item);
+    
+            ItemStack item = itemEntity.getItemStack();
+            AuctionableItem ai = regionalConfigManager.getAuctionableItemConfig(itemEntity);
             
             if(null == ai) continue;
             
@@ -304,7 +315,7 @@ public class AuctionDataManager
         String vaultPath = new StringBuilder(43).append("vaults.").append(p.getUniqueId()).toString();
         ConfigurationSection singlePlayerVaultSection = data.getConfigurationSection(vaultPath);
         
-        return singlePlayerVaultSection.getInt("itemCount", 0) < auctionConfig.getVaultCapacity(p);
+        return singlePlayerVaultSection.getInt("itemCount", 0) < sharedConfigManager.getVaultCapacity(p);
     }
     
     public boolean occupyVault(Player p)
@@ -314,7 +325,7 @@ public class AuctionDataManager
         ConfigurationSection singlePlayerVaultSection = data.getConfigurationSection(vaultPath);
         int itemCount = singlePlayerVaultSection.getInt("itemCount", 0);
         
-        if(itemCount < auctionConfig.getVaultCapacity(p))
+        if(itemCount < sharedConfigManager.getVaultCapacity(p))
         {
             singlePlayerVaultSection.set("itemCount", ++itemCount);
             return true;
@@ -568,9 +579,9 @@ public class AuctionDataManager
     
     public void addToTransferAccount(Double amount)
     {
-        if(auctionConfig.getTransferAccount().length() != 0)
+        if(sharedConfigManager.getTransferAccount().length() != 0)
         {
-            Main.economy.depositPlayer(auctionConfig.getTransferAccount(), amount);
+            Main.economy.depositPlayer(sharedConfigManager.getTransferAccount(), amount);
         }
     }
     
