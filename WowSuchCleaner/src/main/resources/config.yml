@@ -46,6 +46,7 @@ cleaning:
         autoMerge: false
         intervalInSeconds: 0
         generousDelayInSeconds: 0
+        protectQuickShopItems: true
         preservedItems: []
         inRegionNotification: false
         notify: []
@@ -65,6 +66,8 @@ cleaning:
         # The interval in seconds of active cleaning
         generousDelayInSeconds: 0
         # Items will not be removed until they've lived for ___ second(s).
+        protectQuickShopItems: true
+        # Whether to protect QuickShop items from being removed by active cleaner.
         preservedItems:
         # These items are preserved from active cleaning
           - '2'

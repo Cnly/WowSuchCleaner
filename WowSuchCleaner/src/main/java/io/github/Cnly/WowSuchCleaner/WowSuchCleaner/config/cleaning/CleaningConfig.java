@@ -1,14 +1,14 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.cleaning;
 
-import java.util.*;
-
 import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.Crafter.Crafter.utils.ItemUtils;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
-
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.*;
 
 public class CleaningConfig
 {
@@ -19,6 +19,7 @@ public class CleaningConfig
     private boolean autoMerge;
     private int intervalInSeconds;
     private int generousDelayInTicks; // Tick conversion for the config field generousDelayInSeconds
+    private boolean protectQuickShopItems;
     private List<ItemStack> preservedItems;
     private boolean inRegionNotification;
     private HashMap<Integer, String> notificationMap;
@@ -50,6 +51,7 @@ public class CleaningConfig
         this.autoMerge = baseSection.getBoolean("active.autoMerge");
         this.intervalInSeconds = baseSection.getInt("active.intervalInSeconds");
         this.generousDelayInTicks = baseSection.getInt("active.generousDelayInSeconds") * 20;
+        this.protectQuickShopItems = baseSection.getBoolean("active.protectQuickShopItems");
         this.clickableCleaningNotification = baseSection.getBoolean("active.clickableCleaningNotification");
         
         List<String> tempPreservedItems = baseSection.getStringList("active.preservedItems");
@@ -98,6 +100,15 @@ public class CleaningConfig
     
     public boolean isPreservedItem(ItemStack item)
     {
+        if(protectQuickShopItems)
+        {
+            // TODO: Add more showcase plugins, or use display name/lore filter.
+            String displayName = ItemUtils.getDisplayName(item);
+            if(null != displayName)
+            {
+                return displayName.startsWith(ChatColor.RED + "QuickShop ");
+            }
+        }
         for(ItemStack i : preservedItems)
         {
             if(item.getType() != i.getType()) continue;
@@ -139,7 +150,17 @@ public class CleaningConfig
     {
         return generousDelayInTicks;
     }
-    
+
+    public boolean isProtectQuickShopItems()
+    {
+        return protectQuickShopItems;
+    }
+
+    public void setProtectQuickShopItems(boolean protectQuickShopItems)
+    {
+        this.protectQuickShopItems = protectQuickShopItems;
+    }
+
     public List<ItemStack> getPreservedItems()
     {
         return Collections.unmodifiableList(preservedItems);
