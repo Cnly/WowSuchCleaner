@@ -6,11 +6,10 @@ import org.bukkit.inventory.ItemStack;
 public class DefaultItem extends AuctionableItem
 {
     
-    public static final ItemStack DEFAULT_ITEMSTACKS = new ItemStack(Material.AIR);
-    
-    public DefaultItem(double startingPrice, double minimumIncrement, int preserveTimeInSeconds, int auctionDurationInSeconds)
-    {
-        super(DEFAULT_ITEMSTACKS, startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
+    public static final ItemStack DEFAULT_ITEMSTACK = new ItemStack(Material.AIR);
+
+    public DefaultItem(float minDurabilityPercent, float maxDurabilityPercent, double startingPrice, double minimumIncrement, int preserveTimeInSeconds, int auctionDurationInSeconds) {
+        super(DEFAULT_ITEMSTACK, minDurabilityPercent, maxDurabilityPercent, startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
     }
     
     @Override
@@ -22,8 +21,14 @@ public class DefaultItem extends AuctionableItem
         }
         else
         {
-            return true;
+            short maxDurability = item.getType().getMaxDurability();
+            if(maxDurability != 0)  // duration acting as extra data to indicate material variant
+            {
+                short durability = (short)(maxDurability - item.getDurability());
+                if(!(durability >= (short)(maxDurability * this.minDurabilityPercent) && durability <= (short)(maxDurability * this.maxDurabilityPercent))) return false;
+            }
         }
+        return true;
     }
     
 }
