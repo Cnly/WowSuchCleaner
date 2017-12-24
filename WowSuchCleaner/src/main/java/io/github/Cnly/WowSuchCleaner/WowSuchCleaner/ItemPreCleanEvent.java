@@ -1,15 +1,13 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import io.github.Cnly.Crafter.Crafter.utils.regions.boxregions.ApproximateBoxRegion;
 import org.bukkit.entity.Item;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * The event called before the active cleaner cleans.

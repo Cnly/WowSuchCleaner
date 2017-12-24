@@ -1,19 +1,12 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction;
 
-import io.github.Cnly.Crafter.Crafter.utils.regions.boxregions.ApproximateBoxRegion;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.permissions.PermissionAttachmentInfo;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class AuctionConfig
 {

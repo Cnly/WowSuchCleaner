@@ -2,12 +2,10 @@ package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners;
 
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemDespawnEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class PassiveCleaningItemListener implements Listener
 {

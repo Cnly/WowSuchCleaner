@@ -1,8 +1,6 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.region;
 
-import io.github.Cnly.Crafter.Crafter.utils.regions.boxregions.ApproximateBoxRegion;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 public class WorldRegion extends WSCApproxBoxRegion
 {
