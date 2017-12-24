@@ -1,16 +1,14 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
+import io.github.Cnly.Crafter.Crafter.framework.configs.CrafterYamlConfigManager;
+import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
+import io.github.Cnly.Crafter.Crafter.utils.CompatUtils;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.RegionalConfigManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.SharedConfigManager;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionableItem;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotOperationMenu;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotShowcase;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.listeners.BidHandler;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -19,14 +17,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import io.github.Cnly.Crafter.Crafter.framework.configs.CrafterYamlConfigManager;
-import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
-import io.github.Cnly.Crafter.Crafter.utils.CompatUtils;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionableItem;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotOperationMenu;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui.LotShowcase;
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class AuctionDataManager
 {
@@ -143,9 +136,9 @@ public class AuctionDataManager
         return true;
     }
     
-    public void addLots(List<Item> items)
+    public int addLots(List<Item> items)
     {
-        
+        int addedCount = 0;
         for(Item itemEntity : items)
         {
     
@@ -153,17 +146,19 @@ public class AuctionDataManager
             AuctionableItem ai = regionalConfigManager.getAuctionableItemConfig(itemEntity);
             
             if(null == ai) continue;
-            
+
             double startingPrice = (((int)(ai.getStartingPrice() * 100)) * item.getAmount()) / 100D;
             double minimumIncrement = (((int)(ai.getMinimumIncrement() * 100)) * item.getAmount()) / 100D;
             
             Lot lot = new Lot(item, false, startingPrice, null, null, -1, minimumIncrement, System.currentTimeMillis() + ai.getPreserveTimeInSeconds() * 1000, ai.getAuctionDurationInSeconds() * 1000);
             lots.add(lot);
+
+            addedCount++;
             
         }
         
         LotShowcase.updateAll();
-        
+        return addedCount;
     }
     
     public boolean removeLot(Lot lot)
