@@ -128,7 +128,7 @@ public class AuctionDataManager
         double startingPrice = (((int)(ai.getStartingPrice() * 100)) * item.getAmount()) / 100D;
         double minimumIncrement = (((int)(ai.getMinimumIncrement() * 100)) * item.getAmount()) / 100D;
         
-        Lot lot = new Lot(item, false, startingPrice, null, null, -1, minimumIncrement, System.currentTimeMillis() + ai.getPreserveTimeInSeconds() * 1000, ai.getAuctionDurationInSeconds() * 1000);
+        Lot lot = new Lot(item, false, startingPrice, null, null, null, -1, minimumIncrement, System.currentTimeMillis() + ai.getPreserveTimeInSeconds() * 1000, ai.getAuctionDurationInSeconds() * 1000);
         lots.add(lot);
         
         LotShowcase.updateAll();
@@ -150,7 +150,7 @@ public class AuctionDataManager
             double startingPrice = (((int)(ai.getStartingPrice() * 100)) * item.getAmount()) / 100D;
             double minimumIncrement = (((int)(ai.getMinimumIncrement() * 100)) * item.getAmount()) / 100D;
             
-            Lot lot = new Lot(item, false, startingPrice, null, null, -1, minimumIncrement, System.currentTimeMillis() + ai.getPreserveTimeInSeconds() * 1000, ai.getAuctionDurationInSeconds() * 1000);
+            Lot lot = new Lot(item, false, startingPrice, null, null, null, -1, minimumIncrement, System.currentTimeMillis() + ai.getPreserveTimeInSeconds() * 1000, ai.getAuctionDurationInSeconds() * 1000);
             lots.add(lot);
 
             addedCount++;
@@ -234,6 +234,7 @@ public class AuctionDataManager
         double price = lot.getPrice();
         String lastBidPlayerName = lot.getLastBidPlayerName();
         UUID lastBidPlayerUuid = lot.getLastBidPlayerUuid();
+        String lastBidWorld = lot.getLastBidWorld();
         double lastBidPrice = lot.getLastBidPrice();
         double minimumIncrement = lot.getMinimumIncrement();
         long preserveTimeExpire = lot.getPreserveTimeExpire();
@@ -251,6 +252,7 @@ public class AuctionDataManager
         singleLotSection.set("price", price);
         singleLotSection.set("lastBidPlayerName", lastBidPlayerName);
         singleLotSection.set("lastBidPlayerUuid", null == lastBidPlayerUuid ? null : lastBidPlayerUuid.toString());
+        singleLotSection.set("lastBidWorld", lastBidWorld);
         singleLotSection.set("lastBidPrice", lastBidPrice);
         singleLotSection.set("minimumIncrement", minimumIncrement);
         singleLotSection.set("preserveTimeExpire", preserveTimeExpire);
@@ -284,6 +286,7 @@ public class AuctionDataManager
         
         lot.setLastBidPlayerName(anonymous ? localeManager.getLocalizedString("ui.anonymous") : p.getName());
         lot.setLastBidPlayerUuid(p.getUniqueId());
+        lot.setLastBidWorld(p.getWorld().getName());
         lot.setLastBidPrice(priceIncrement);
         lot.setPrice(lot.getPrice() + priceIncrement);
         
@@ -433,7 +436,7 @@ public class AuctionDataManager
     {
         UUID buyerUuid = lot.getLastBidPlayerUuid();
         Player buyer = CompatUtils.getPlayer(buyerUuid);
-        if(null == buyer || buyer.getInventory().firstEmpty() == -1)
+        if(null == buyer || !lot.getLastBidWorld().equals(buyer.getWorld().getName()) || buyer.getInventory().firstEmpty() == -1)
         {
             String path = new StringBuilder(80).append("vaults.").append(buyerUuid.toString()).append('.').append(lot.getUuid()).toString();
             data.set(path, lot.getItem());
@@ -503,12 +506,13 @@ public class AuctionDataManager
             double price = singleLotSection.getDouble("price");
             String lastBidPlayerName = singleLotSection.getString("lastBidPlayerName");
             UUID lastBidPlayerUuid = singleLotSection.isSet("lastBidPlayerUuid") ? UUID.fromString(singleLotSection.getString("lastBidPlayerUuid")) : null;
+            String lastBidWorld = singleLotSection.isSet("lastBidWorld") ? singleLotSection.getString("lastBidWorld") : null;
             double lastBidPrice = singleLotSection.getDouble("lastBidPrice");
             double minimumIncrement = singleLotSection.getDouble("minimumIncrement");
             long preserveTimeExpire = singleLotSection.getLong("preserveTimeExpire");
             long auctionDurationExpire = singleLotSection.getLong("auctionDurationExpire");
             
-            Lot lot = new Lot(UUID.fromString(uuidString), item, started, price, lastBidPlayerName, lastBidPlayerUuid, lastBidPrice, minimumIncrement, preserveTimeExpire, auctionDurationExpire);
+            Lot lot = new Lot(UUID.fromString(uuidString), item, started, price, lastBidPlayerName, lastBidPlayerUuid, lastBidWorld, lastBidPrice, minimumIncrement, preserveTimeExpire, auctionDurationExpire);
             lots.add(lot);
             
         }
