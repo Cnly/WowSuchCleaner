@@ -436,7 +436,7 @@ public class AuctionDataManager
     {
         UUID buyerUuid = lot.getLastBidPlayerUuid();
         Player buyer = CompatUtils.getPlayer(buyerUuid);
-        if(null == buyer || !lot.getLastBidWorld().equals(buyer.getWorld().getName()) || buyer.getInventory().firstEmpty() == -1)
+        if(null == buyer || !buyer.getWorld().getName().equals(lot.getLastBidWorld()) || buyer.getInventory().firstEmpty() == -1)
         {
             String path = new StringBuilder(80).append("vaults.").append(buyerUuid.toString()).append('.').append(lot.getUuid()).toString();
             data.set(path, lot.getItem());
