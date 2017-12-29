@@ -1,20 +1,25 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction;
 
 import io.github.Cnly.Crafter.Crafter.utils.ItemUtils;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
-
-import org.bukkit.inventory.ItemStack;
+import java.util.Objects;
 
 public class AuctionableItem
 {
     
     protected final ItemStack item;
+    protected final float minDurabilityPercent;
+    protected final float maxDurabilityPercent;
+    private final short minDurability;
+    private final short maxDurability;
     protected final double startingPrice;
     protected final double minimumIncrement;
     protected final int preserveTimeInSeconds;
     protected final int auctionDurationInSeconds;
-    
+
     @SuppressWarnings("unchecked")
     public static AuctionableItem fromMap(Map<?, ?> map)
     {
@@ -22,6 +27,8 @@ public class AuctionableItem
         Map<String, Object> convertedMap = (Map<String, Object>)map;
         
         String itemRepresent = (String)convertedMap.get("item");
+        float minDurabilityPercent = ((Integer)convertedMap.get("minDurabilityPercent") / 100.0F);
+        float maxDurabilityPercent = ((Integer)convertedMap.get("maxDurabilityPercent") / 100.0F);
         double startingPrice = (double)convertedMap.get("startingPrice");
         double minimumIncrement = (double)convertedMap.get("minimumIncrement");
         int preserveTimeInSeconds = (int)convertedMap.get("preserveTimeInSeconds");
@@ -30,32 +37,46 @@ public class AuctionableItem
         ItemStack item = null;
         if(itemRepresent.equalsIgnoreCase("default"))
         {
-            return new DefaultItem(startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
+            return new DefaultItem(minDurabilityPercent, maxDurabilityPercent, startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
         }
         else
         {
-            item = ItemUtils.getItemByIdString(itemRepresent);
+            if(Character.isDigit(itemRepresent.charAt(0)))
+            {
+                item = ItemUtils.getItemByIdString(itemRepresent);
+            }
+            else
+            {
+                item = ItemUtils.getItemByTypeString(itemRepresent);
+            }
         }
-        
-        return new AuctionableItem(item, startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
+        return new AuctionableItem(item, minDurabilityPercent, maxDurabilityPercent, startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
     }
 
-    public AuctionableItem(ItemStack item, double startingPrice, double minimumIncrement, int preserveTimeInSeconds, int auctionDurationInSeconds)
-    {
-        super();
+    public AuctionableItem(ItemStack item, float minDurabilityPercent, float maxDurabilityPercent, double startingPrice, double minimumIncrement, int preserveTimeInSeconds, int auctionDurationInSeconds) {
         this.item = item;
+        this.minDurabilityPercent = minDurabilityPercent;
+        this.maxDurabilityPercent = maxDurabilityPercent;
+        this.minDurability = (short)(item.getType().getMaxDurability() * minDurabilityPercent);
+        this.maxDurability = (short)(item.getType().getMaxDurability() * maxDurabilityPercent);
         this.startingPrice = startingPrice;
         this.minimumIncrement = minimumIncrement;
         this.preserveTimeInSeconds = preserveTimeInSeconds;
         this.auctionDurationInSeconds = auctionDurationInSeconds;
     }
-    
+
     public boolean isTheSameItem(ItemStack item)
     {
-        if(item.getType() != this.item.getType()) return false;
-        if(this.item.getType().getMaxDurability() == 0)
+        Material type = this.item.getType();
+        if(item.getType() != type) return false;
+        if(type.getMaxDurability() == 0)  // duration acting as extra data to indicate material variant
         {
             if(item.getDurability() != this.item.getDurability()) return false;
+        }
+        else
+        {
+            short durability = (short)(maxDurability - item.getDurability());
+            if(!(durability >= this.minDurability && durability <= this.maxDurability)) return false;
         }
         return true;
     }
@@ -86,47 +107,22 @@ public class AuctionableItem
     }
 
     @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + auctionDurationInSeconds;
-        result = prime * result + ((item == null) ? 0 : item.hashCode());
-        long temp;
-        temp = Double.doubleToLongBits(minimumIncrement);
-        result = prime * result + (int)(temp ^ (temp >>> 32));
-        result = prime * result + preserveTimeInSeconds;
-        temp = Double.doubleToLongBits(startingPrice);
-        result = prime * result + (int)(temp ^ (temp >>> 32));
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuctionableItem that = (AuctionableItem) o;
+        return minDurability == that.minDurability &&
+                maxDurability == that.maxDurability &&
+                Double.compare(that.startingPrice, startingPrice) == 0 &&
+                Double.compare(that.minimumIncrement, minimumIncrement) == 0 &&
+                preserveTimeInSeconds == that.preserveTimeInSeconds &&
+                auctionDurationInSeconds == that.auctionDurationInSeconds &&
+                Objects.equals(item, that.item);
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if(this == obj)
-            return true;
-        if(obj == null)
-            return false;
-        if(getClass() != obj.getClass())
-            return false;
-        AuctionableItem other = (AuctionableItem)obj;
-        if(auctionDurationInSeconds != other.auctionDurationInSeconds)
-            return false;
-        if(item == null)
-        {
-            if(other.item != null)
-                return false;
-        }
-        else if(!item.equals(other.item))
-            return false;
-        if(Double.doubleToLongBits(minimumIncrement) != Double.doubleToLongBits(other.minimumIncrement))
-            return false;
-        if(preserveTimeInSeconds != other.preserveTimeInSeconds)
-            return false;
-        if(Double.doubleToLongBits(startingPrice) != Double.doubleToLongBits(other.startingPrice))
-            return false;
-        return true;
+    public int hashCode() {
+
+        return Objects.hash(item, minDurability, maxDurability, startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
     }
-    
 }

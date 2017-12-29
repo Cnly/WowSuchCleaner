@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
@@ -21,6 +22,8 @@ public class CleaningConfig
     private int generousDelayInTicks; // Tick conversion for the config field generousDelayInSeconds
     private boolean protectQuickShopItems;
     private List<ItemStack> preservedItems;
+    private List<String> protectedDisplayNameContents;
+    private List<String> protectedLoreContents;
     private boolean inRegionNotification;
     private HashMap<Integer, String> notificationMap;
     private boolean clickableCleaningNotification;
@@ -40,12 +43,12 @@ public class CleaningConfig
     @SuppressWarnings("unchecked")
     private void load()
     {
-        
+
+        ConfigurationSection baseSection = config.getConfigurationSection("cleaning.profiles." + profileName);
+
         this.preservedItems = new ArrayList<>();
         this.notificationMap = new HashMap<>();
-    
-        ConfigurationSection baseSection = config.getConfigurationSection("cleaning.profiles." + profileName);
-        
+
         this.activeCleaningEnabled = baseSection.getBoolean("active.enabled");
         this.activeCleaningAuction = baseSection.getBoolean("active.auction");
         this.autoMerge = baseSection.getBoolean("active.autoMerge");
@@ -57,8 +60,20 @@ public class CleaningConfig
         List<String> tempPreservedItems = baseSection.getStringList("active.preservedItems");
         for(String s : tempPreservedItems)
         {
-            this.preservedItems.add(ItemUtils.getItemByIdString(s));
+            ItemStack item = null;
+            if(Character.isDigit(s.charAt(0)))
+            {
+                item = ItemUtils.getItemByIdString(s);
+            }
+            else
+            {
+                item = ItemUtils.getItemByTypeString(s);
+            }
+            this.preservedItems.add(item);
         }
+
+        this.protectedDisplayNameContents = baseSection.getStringList("active.protectedDisplayNameContents");
+        this.protectedLoreContents = baseSection.getStringList("protectedLoreContents");
     
         this.inRegionNotification = baseSection.getBoolean("active.inRegionNotification");
     
@@ -100,15 +115,7 @@ public class CleaningConfig
     
     public boolean isPreservedItem(ItemStack item)
     {
-        if(protectQuickShopItems)
-        {
-            // TODO: Add more showcase plugins, or use display name/lore filter.
-            String displayName = ItemUtils.getDisplayName(item);
-            if(null != displayName)
-            {
-                return displayName.startsWith(ChatColor.RED + "QuickShop ");
-            }
-        }
+
         for(ItemStack i : preservedItems)
         {
             if(item.getType() != i.getType()) continue;
@@ -118,6 +125,48 @@ public class CleaningConfig
             }
             return true;
         }
+
+        if(item.hasItemMeta())
+        {
+            ItemMeta meta = item.getItemMeta();
+
+            if(meta.hasDisplayName())
+            {
+                String displayName = meta.getDisplayName();
+                if(protectQuickShopItems)
+                // TODO: Consider removing this? We have protectedDisplayNameContents now.
+                {
+                    if(displayName.startsWith(ChatColor.RED + "QuickShop "))
+                    {
+                        return true;
+                    }
+                }
+                for(String s : protectedDisplayNameContents)
+                {
+                    if(displayName.contains(s))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if(meta.hasLore())
+            {
+                List<String> loreLines = meta.getLore();
+                for(String loreLine : loreLines)
+                {
+                    for(String s : protectedLoreContents)
+                    {
+                        if(loreLine.contains(s))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+        }
+
         return false;
     }
     
@@ -165,7 +214,15 @@ public class CleaningConfig
     {
         return Collections.unmodifiableList(preservedItems);
     }
-    
+
+    public List<String> getProtectedDisplayNameContents() {
+        return protectedDisplayNameContents;
+    }
+
+    public List<String> getProtectedLoreContents() {
+        return protectedLoreContents;
+    }
+
     public boolean isInRegionNotification()
     {
         return inRegionNotification;

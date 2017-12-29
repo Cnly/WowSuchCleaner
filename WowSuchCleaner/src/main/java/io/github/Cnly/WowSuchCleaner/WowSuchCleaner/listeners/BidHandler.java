@@ -5,14 +5,9 @@ import io.github.Cnly.Crafter.Crafter.utils.CompatUtils;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.RegionalConfigManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.SharedConfigManager;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.Lot;
-
-import java.util.*;
-
 import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +15,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.*;
 
 public class BidHandler implements Listener
 {

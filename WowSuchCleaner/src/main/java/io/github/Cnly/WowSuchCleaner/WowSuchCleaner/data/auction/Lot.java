@@ -1,8 +1,8 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction;
 
-import java.util.UUID;
-
 import org.bukkit.inventory.ItemStack;
+
+import java.util.UUID;
 
 public class Lot
 {
@@ -13,18 +13,19 @@ public class Lot
     private double price;
     private String lastBidPlayerName;
     private UUID lastBidPlayerUuid;
+    private String lastBidWorld;
     private double lastBidPrice;
     private final double minimumIncrement;
     private final long preserveTimeExpire;
     private long auctionDurationExpire;
     
-    public Lot(ItemStack item, boolean started, double price, String lastBidPlayerName, UUID lastBidPlayerUuid, double lastBidPrice, double minimumIncrement, long preserveTimeExpire,
+    public Lot(ItemStack item, boolean started, double price, String lastBidPlayerName, UUID lastBidPlayerUuid, String lastBidWorld, double lastBidPrice, double minimumIncrement, long preserveTimeExpire,
             long auctionDurationExpire)
     {
-        this(UUID.randomUUID(), item, started, price, lastBidPlayerName, lastBidPlayerUuid, lastBidPrice, minimumIncrement, preserveTimeExpire, auctionDurationExpire);
+        this(UUID.randomUUID(), item, started, price, lastBidPlayerName, lastBidPlayerUuid, lastBidWorld, lastBidPrice, minimumIncrement, preserveTimeExpire, auctionDurationExpire);
     }
 
-    public Lot(UUID uuid, ItemStack item, boolean started, double price, String lastBidPlayerName, UUID lastBidPlayerUuid, double lastBidPrice, double minimumIncrement, long preserveTimeExpire,
+    public Lot(UUID uuid, ItemStack item, boolean started, double price, String lastBidPlayerName, UUID lastBidPlayerUuid, String lastBidWorld, double lastBidPrice, double minimumIncrement, long preserveTimeExpire,
             long auctionDurationExpire)
     {
         super();
@@ -34,6 +35,7 @@ public class Lot
         this.price = price;
         this.lastBidPlayerName = lastBidPlayerName;
         this.lastBidPlayerUuid = lastBidPlayerUuid;
+        this.lastBidWorld = lastBidWorld;
         this.lastBidPrice = lastBidPrice;
         this.minimumIncrement = minimumIncrement;
         this.preserveTimeExpire = preserveTimeExpire;
@@ -78,6 +80,14 @@ public class Lot
     public void setLastBidPlayerUuid(UUID lastBidPlayerUuid)
     {
         this.lastBidPlayerUuid = lastBidPlayerUuid;
+    }
+
+    public String getLastBidWorld() {
+        return lastBidWorld;
+    }
+
+    public void setLastBidWorld(String lastBidWorld) {
+        this.lastBidWorld = lastBidWorld;
     }
 
     public double getLastBidPrice()

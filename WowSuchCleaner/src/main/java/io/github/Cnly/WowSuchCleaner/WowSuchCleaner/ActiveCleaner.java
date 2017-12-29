@@ -1,24 +1,23 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
+import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.Crafter.Crafter.utils.regions.boxregions.ApproximateBoxRegion;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.region.RegionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.RegionalConfigManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.SharedConfigManager;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.cleaning.CleaningConfig;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.region.RegionConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.region.WorldRegion;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-
-import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.cleaning.CleaningConfig;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ActiveCleaner
 {
@@ -228,17 +227,16 @@ public class ActiveCleaner
                     }
     
                     boolean isAuction = cleaningConfig.isActiveCleaningAuction();
+                    int auctionCount = 0;
                     if(isAuction && null != itemsToAuctionForRegion)
                     {
-                        auctionDataManager.addLots(itemsToAuctionForRegion);
+                        auctionCount = auctionDataManager.addLots(itemsToAuctionForRegion);
                     }
     
                     String msg = cleaningConfig.getNotification(0)
                                                .replace("{count}", null != itemsToCleanForRegion ?
                                                                    String.valueOf(itemsToCleanForRegion.size()) : "0")
-                                               .replace("{auctionCount}",
-                                                        !isAuction || null == itemsToAuctionForRegion ? "0" :
-                                                        String.valueOf(itemsToAuctionForRegion.size()));
+                                               .replace("{auctionCount}", String.valueOf(auctionCount));
     
                     if(cleaningConfig.isInRegionNotification())
                     {

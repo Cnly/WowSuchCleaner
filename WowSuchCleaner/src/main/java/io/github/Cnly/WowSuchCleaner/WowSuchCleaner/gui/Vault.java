@@ -1,23 +1,20 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.gui;
 
+import io.github.Cnly.BusyInv.BusyInv.events.ItemClickEvent;
+import io.github.Cnly.BusyInv.BusyInv.items.BusyItem;
+import io.github.Cnly.BusyInv.BusyInv.menus.ChestMenu;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.SharedConfigManager;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.ItemStack;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
-
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.SharedConfigManager;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.ItemStack;
-
-import io.github.Cnly.BusyInv.BusyInv.events.ItemClickEvent;
-import io.github.Cnly.BusyInv.BusyInv.items.BusyItem;
-import io.github.Cnly.BusyInv.BusyInv.menus.ChestMenu;
-import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 
 public class Vault extends ChestMenu
 {

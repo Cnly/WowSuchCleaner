@@ -1,8 +1,7 @@
 package io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.region;
 
-import io.github.Cnly.Crafter.Crafter.utils.regions.boxregions.ApproximateBoxRegion;
-import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.cleaning.CleaningConfig;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.auction.AuctionConfig;
+import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.cleaning.CleaningConfig;
 
 public class RegionConfig
 {
