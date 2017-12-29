@@ -54,6 +54,8 @@ cleaning:
         intervalInSeconds: 0
         generousDelayInSeconds: 0
         protectQuickShopItems: true
+        protectedDisplayNameContents: []
+        protectedLoreContents: []
         preservedItems: []
         inRegionNotification: false
         notify: []
@@ -75,20 +77,30 @@ cleaning:
         # Items will not be removed until they've lived for ___ second(s).
         protectQuickShopItems: true
         # Whether to protect QuickShop items from being removed by active cleaner.
+        protectedDisplayNameContents:
+          - 'MySpecialItemName'
+        # If the display name of an item contains ANY of the above strings,
+        # it will be preserved from active cleaning
+        # If you want to match colours, you may want this symbol: §
+        protectedLoreContents:
+          - 'MySpecialItemLore'
+        # If ANY lore line of an item contains ANY of the above strings,
+        # it will be preserved from active cleaning
+        # If you want to match colours, you may want this symbol: §
         preservedItems:
-        # These items are preserved from active cleaning
           - '2'
+        # These items are preserved from active cleaning
         inRegionNotification: true
         # Set to true to only broadcast to players inside region.
         # Or set to false to use server broadcast.
         notify:
-        # Notify players when ___ seconds are left until active cleaning
-        # Notification messages can be overridden here by changing the text in quotation marks
-        # Leave it '' to use messages defined in locale file
           - 300: ''
           - 60: ''
           - 30: ''
           - 10: ''
+        # Notify players when ___ seconds are left until active cleaning
+        # Notification messages can be overridden here by changing the text in quotation marks
+        # Leave it '' to use messages defined in locale file
         clickableCleaningNotification: false
         # Enabling will make cleaning notifications clickable, which will open the showcase.
       passive:
