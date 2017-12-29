@@ -23,7 +23,10 @@ auction:
       # A 'DEFAULT' item could be used in non-blacklist mode too, representing those items that don't have specific settings
       # To specify a 'DEFAULT' item, just set an item's ID to DEFAULT
       auctionableItems:
-        - item: '4'
+        - item: 'WOOL:5'
+          # Please note the new item representation for WSC after item ID is completely removed
+          # Format: ITEM_NAME:DATA_VALUE or just ITEM_NAME
+          # The original format ITEM_ID:DATA_VALUE will still work to keep compatibility for older servers
           minDurabilityPercent: 0
           # The percentile durability of the item will at least have this value, in order to be matched by this rule
           maxDurabilityPercent: 100
@@ -88,7 +91,10 @@ cleaning:
         # it will be preserved from active cleaning
         # If you want to match colours, you may want this symbol: §
         preservedItems:
-          - '2'
+          - 'WOOL:5'
+          # Please note the new item representation for WSC after item ID is completely removed
+          # Format: ITEM_NAME:DATA_VALUE or just ITEM_NAME
+          # The original format ITEM_ID:DATA_VALUE will still work to keep compatibility for older servers
         # These items are preserved from active cleaning
         inRegionNotification: true
         # Set to true to only broadcast to players inside region.

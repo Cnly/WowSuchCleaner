@@ -41,9 +41,15 @@ public class AuctionableItem
         }
         else
         {
-            item = ItemUtils.getItemByIdString(itemRepresent);
+            if(Character.isDigit(itemRepresent.charAt(0)))
+            {
+                item = ItemUtils.getItemByIdString(itemRepresent);
+            }
+            else
+            {
+                item = ItemUtils.getItemByTypeString(itemRepresent);
+            }
         }
-        
         return new AuctionableItem(item, minDurabilityPercent, maxDurabilityPercent, startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
     }
 
@@ -63,13 +69,13 @@ public class AuctionableItem
     {
         Material type = this.item.getType();
         if(item.getType() != type) return false;
-        short durability = (short)(maxDurability - item.getDurability());
         if(type.getMaxDurability() == 0)  // duration acting as extra data to indicate material variant
         {
-            if(durability != this.item.getDurability()) return false;
+            if(item.getDurability() != this.item.getDurability()) return false;
         }
         else
         {
+            short durability = (short)(maxDurability - item.getDurability());
             if(!(durability >= this.minDurability && durability <= this.maxDurability)) return false;
         }
         return true;

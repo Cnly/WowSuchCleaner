@@ -60,7 +60,16 @@ public class CleaningConfig
         List<String> tempPreservedItems = baseSection.getStringList("active.preservedItems");
         for(String s : tempPreservedItems)
         {
-            this.preservedItems.add(ItemUtils.getItemByIdString(s));
+            ItemStack item = null;
+            if(Character.isDigit(s.charAt(0)))
+            {
+                item = ItemUtils.getItemByIdString(s);
+            }
+            else
+            {
+                item = ItemUtils.getItemByTypeString(s);
+            }
+            this.preservedItems.add(item);
         }
 
         this.protectedDisplayNameContents = baseSection.getStringList("active.protectedDisplayNameContents");
