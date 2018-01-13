@@ -102,14 +102,12 @@ public class BidHandler implements Listener
         double charge = bid * (sharedConfigManager.getChargePercentPerBid() / 100);
         if(charge < sharedConfigManager.getMinimumChargePerBid()) charge = sharedConfigManager.getMinimumChargePerBid();
 
-        EconomyResponse er = null;
         boolean playerHasEnough = false;
         Double transactionTotal = 0D;
 
         if(auctionDataManager.hasBidBefore(p, lot))
         {
             transactionTotal = bid + charge;
-
         }
         else
         {
@@ -125,7 +123,7 @@ public class BidHandler implements Listener
         if(!playerHasEnough)
         {
             p.sendMessage(localeManager.getLocalizedString("ui.balanceNotEnough")
-                    .replace("{balance}", String.valueOf(er.balance))
+                    .replace("{balance}", String.valueOf(Main.economy.getBalance(p)))
                     .replace("{currency}", Main.economy.currencyNamePlural()));
             p.sendMessage(localeManager.getLocalizedString("ui.chargePerBid")
                     .replace("{chargePercent}", String.valueOf(sharedConfigManager.getChargePercentPerBid()))
