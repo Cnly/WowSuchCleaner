@@ -20,34 +20,34 @@ import java.util.*;
 
 public class BidHandler implements Listener
 {
-    
+
     private HashMap<UUID, BidArgument> biddingPlayers = new HashMap<>();
     private Main main = Main.getInstance();
     private ILocaleManager localeManager = main.getLocaleManager();
     private SharedConfigManager sharedConfigManager = main.getSharedConfigManager();
     private RegionalConfigManager regionalConfigManager = main.getRegionalConfigManager();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
-    
+
     public BidHandler()
     {
         auctionDataManager.setBidHandler(this);
     }
-    
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void handleBid(AsyncPlayerChatEvent e)
     {
-        
+
         Player p = e.getPlayer();
         UUID uuid = p.getUniqueId();
-        
+
         BidArgument arg = biddingPlayers.get(uuid);
         if(arg == null) return;
-        
+
         BidCallback callback = arg.getCallback();
         Lot lot = arg.getLot();
-        
+
         e.setCancelled(true);
-    
+
         if(!auctionDataManager.hasLot(lot))
         {
             if(lot.isStarted())
@@ -63,10 +63,10 @@ public class BidHandler implements Listener
                 return;
             }
         }
-        
+
         boolean anonymous = false;
         String msg = ChatColor.stripColor(e.getMessage());
-    
+
         if(msg.length() == 0) return;
         if(msg.equalsIgnoreCase("cancel"))
         {
@@ -78,7 +78,7 @@ public class BidHandler implements Listener
             anonymous = true;
             msg = msg.substring(1);
         }
-        
+
         double bid = 0;
         try
         {
@@ -90,7 +90,7 @@ public class BidHandler implements Listener
             p.sendMessage(localeManager.getLocalizedString("ui.bidPrompt"));
             return;
         }
-        
+
         if(bid < lot.getMinimumIncrement())
         {
             p.sendMessage(localeManager.getLocalizedString("ui.bidTooLow")
@@ -98,21 +98,31 @@ public class BidHandler implements Listener
                     .replace("{currency}", Main.economy.currencyNamePlural()));
             return;
         }
-        
+
         double charge = bid * (sharedConfigManager.getChargePercentPerBid() / 100);
         if(charge < sharedConfigManager.getMinimumChargePerBid()) charge = sharedConfigManager.getMinimumChargePerBid();
-        
+
         EconomyResponse er = null;
+        boolean playerHasEnough = false;
+        Double transactionTotal = 0D;
+
         if(auctionDataManager.hasBidBefore(p, lot))
         {
-            er = Main.economy.withdrawPlayer(p, bid + charge);
+            transactionTotal = bid + charge;
+
         }
         else
         {
-            er = Main.economy.withdrawPlayer(p, lot.getPrice() + bid + charge);
+            transactionTotal = lot.getPrice() + bid + charge;
         }
-        
-        if(!er.transactionSuccess())
+
+        if (Main.economy.getBalance(p) >= transactionTotal)
+        {
+            playerHasEnough = true;
+            Main.economy.withdrawPlayer(p, transactionTotal);
+        }
+
+        if(!playerHasEnough)
         {
             p.sendMessage(localeManager.getLocalizedString("ui.balanceNotEnough")
                     .replace("{balance}", String.valueOf(er.balance))
@@ -123,30 +133,30 @@ public class BidHandler implements Listener
                     .replace("{currency}", Main.economy.currencyNamePlural()));
             return;
         }
-        
+
         auctionDataManager.addToTransferAccount(charge);
         auctionDataManager.bid(p, anonymous, lot, bid);
         auctionDataManager.setLastBid(p, lot, System.currentTimeMillis());
-        
+
         callback.onBidSuccess(p, bid, anonymous);
         biddingPlayers.remove(uuid);
-        
+
         p.sendMessage(localeManager.getLocalizedString("ui.sucessfulBid")
                 .replace("{price}", String.valueOf(bid))
                 .replace("{charge}", String.valueOf(charge))
                 .replace("{currency}", Main.economy.currencyNamePlural()));
-        
+
     }
-    
+
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e)
     {
         biddingPlayers.remove(e.getPlayer().getUniqueId());
     }
-    
+
     public void requestBid(Player p, Lot lot, BidCallback callback)
     {
-        
+
         if(!auctionDataManager.hasLot(lot))
         {
             p.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
@@ -154,17 +164,17 @@ public class BidHandler implements Listener
             callback.onCancel(p);
             return;
         }
-        
+
         if(!auctionDataManager.hasBidBefore(p, lot) && !auctionDataManager.isVaultAvailable(p))
         {
             p.sendMessage(localeManager.getLocalizedString("ui.fullVault"));
             callback.onCancel(p);
             return;
         }
-        
+
         long deltaSeconds = (System.currentTimeMillis() - auctionDataManager.getLastBid(p, lot)) / 1000;
         long bidInterval = sharedConfigManager.getBidIntervalInSeconds();
-        
+
         if(deltaSeconds < bidInterval)
         {
             p.sendMessage(localeManager.getLocalizedString("ui.bidTooFast")
@@ -172,18 +182,18 @@ public class BidHandler implements Listener
             callback.onCancel(p);
             return;
         }
-        
+
         BidArgument arg = new BidArgument(lot, callback);
         biddingPlayers.put(p.getUniqueId(), arg);
-        
+
         p.sendMessage(localeManager.getLocalizedString("ui.bidPrompt"));
         p.sendMessage(localeManager.getLocalizedString("ui.chargePerBid")
                 .replace("{chargePercent}", String.valueOf(sharedConfigManager.getChargePercentPerBid()))
                 .replace("{minimumCharge}", String.valueOf(sharedConfigManager.getMinimumChargePerBid()))
                 .replace("{currency}", Main.economy.currencyNamePlural()));
-        
+
     }
-    
+
     public void cancelInvalidBidState(Lot lot)
     {
         for(Map.Entry<UUID, BidArgument> e : biddingPlayers.entrySet())
@@ -195,7 +205,7 @@ public class BidHandler implements Listener
             cancelBidRequest(e.getKey());
         }
     }
-    
+
     public void cancelInvalidBidStates(List<Lot> lots)
     {
         HashSet<UUID> lotUuidSet = new HashSet<>();
@@ -212,7 +222,7 @@ public class BidHandler implements Listener
             }
         }
     }
-    
+
     public void cancelBidRequest(Player p)
     {
         UUID uuid = p.getUniqueId();
@@ -231,7 +241,7 @@ public class BidHandler implements Listener
         callback.onCancel(p);
         biddingPlayers.remove(uuid);
     }
-    
+
     public void cancelBidRequest(UUID uuid)
     {
         BidArgument arg = biddingPlayers.get(uuid);
@@ -253,22 +263,22 @@ public class BidHandler implements Listener
         }
         biddingPlayers.remove(uuid);
     }
-    
+
     public static interface BidCallback
     {
-        
+
         public void onBidSuccess(Player player, double bid, boolean anonymous);
-        
+
         public void onCancel(Player player);
-        
+
     }
-    
+
     private static class BidArgument
     {
-        
+
         private final Lot lot;
         private final BidCallback callback;
-        
+
         public BidArgument(Lot lot, BidCallback callback)
         {
             super();
@@ -285,7 +295,7 @@ public class BidHandler implements Listener
         {
             return callback;
         }
-        
+
     }
-    
+
 }
