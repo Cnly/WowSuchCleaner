@@ -6,10 +6,10 @@
     <version>1.9.1</version>
 
     <properties>
-        <bukkit.version>1.8.6-R0.1-SNAPSHOT</bukkit.version>
-        <crafter.version>1.5.0-SNAPSHOT</crafter.version>
-        <busyinv.version>1.0.5</busyinv.version>
-        <vault.version>1.5</vault.version>
+        <bukkit.version>1.15.1-R0.1-SNAPSHOT</bukkit.version>
+        <crafter.version>1.5.1-SNAPSHOT</crafter.version>
+        <busyinv.version>1.1.5</busyinv.version>
+        <vault.version>1.7</vault.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -43,7 +43,7 @@
             <dependency>
                 <groupId>mkremins</groupId>
                 <artifactId>fanciful</artifactId>
-                <version>0.3.1</version>
+                <version>0.4</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
@@ -69,14 +69,56 @@
         <dependency>
             <groupId>io.github.Cnly.Crafter</groupId>
             <artifactId>Crafter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.md-5</groupId>
+                    <artifactId>bungeecord-chat</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.github.Cnly.BusyInv</groupId>
             <artifactId>BusyInv</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.md-5</groupId>
+                    <artifactId>bungeecord-chat</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>spigot-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.md-5</groupId>
+                    <artifactId>bungeecord-chat</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -86,8 +128,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>

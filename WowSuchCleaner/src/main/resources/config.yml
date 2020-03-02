@@ -23,7 +23,7 @@ auction:
       # A 'DEFAULT' item could be used in non-blacklist mode too, representing those items that don't have specific settings
       # To specify a 'DEFAULT' item, just set an item's ID to DEFAULT
       auctionableItems:
-        - item: 'WOOL:5'
+        - item: 'RED_WOOL'
           # Please note the new item representation for WSC after item ID is completely removed
           # Format: ITEM_NAME:DATA_VALUE or just ITEM_NAME
           # The original format ITEM_ID:DATA_VALUE will still work to keep compatibility for older servers
@@ -46,7 +46,7 @@ auction:
           minimumIncrement: 0.05
           preserveTimeInSeconds: 600
           auctionDurationInSeconds: 300
-      
+
 cleaning:
   profiles:  # Add other profiles if you need. Remember to put 'default' AT THE BOTTOM of the list. Do not delete 'default'.
     disable:  # This is a handy profile if you want to disable the functions in a region.
@@ -67,7 +67,7 @@ cleaning:
         auction: false
     default:
       active:
-      # Active cleaning means cleaning by this plugin
+        # Active cleaning means cleaning by this plugin
         enabled: false
         # Whether to enable active cleaning
         auction: true
@@ -110,10 +110,10 @@ cleaning:
         clickableCleaningNotification: false
         # Enabling will make cleaning notifications clickable, which will open the showcase.
       passive:
-      # passive cleaning means cleaning by vanilla Minecraft
+        # passive cleaning means cleaning by vanilla Minecraft
         auction: true
         # Whether to enable auction function for items cleaned by passive cleaning
-    
+
 vault:
   capacity:
     defaultCapacity: 9
@@ -122,6 +122,6 @@ vault:
     # Whether to allow players' permission to override the capacity setting
     # Permission example: WowSuchCleaner.vault.capacity.18
     # Note: Max capacity still applies.
-    
+
 locale: en_UK
 # Locale files included by default: en_UK, zh_CN, de_DE

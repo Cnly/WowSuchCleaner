@@ -9,15 +9,13 @@ import io.github.Cnly.Crafter.Crafter.framework.locales.ILocaleManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 
-public class AuctionCommand extends AbstractCrafterCommand
-{
-    
+public class AuctionCommand extends AbstractCrafterCommand {
+
     private Main main = Main.getInstance();
     private ILocaleManager localeManager = main.getLocaleManager();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
-    
-    public AuctionCommand()
-    {
+
+    public AuctionCommand() {
         this.setAction("auction");
         this.setPlayerNeeded(true);
         this.setPlayerNeededNotice(localeManager.getLocalizedString("commands.playerNeeded"));
@@ -27,22 +25,18 @@ public class AuctionCommand extends AbstractCrafterCommand
     }
 
     @Override
-    protected void executeCommand(CommandSender sender, String[] args)
-    {
-        
-        Player p = (Player)sender;
-        ItemStack item = p.getItemInHand();
-        
-        if(!auctionDataManager.addLot(item, p.getLocation()))
-        {
+    protected void executeCommand(CommandSender sender, String[] args) {
+
+        Player p = (Player) sender;
+        ItemStack item = p.getInventory().getItemInMainHand();
+
+        if (!auctionDataManager.addLot(item, p.getLocation())) {
             p.sendMessage(localeManager.getLocalizedString("commands.auction.notAuctionable"));
-        }
-        else
-        {
+        } else {
             p.sendMessage(localeManager.getLocalizedString("commands.auction.success"));
-            p.setItemInHand(null);
+            p.getInventory().setItemInMainHand(null);
         }
-        
+
     }
-    
+
 }
