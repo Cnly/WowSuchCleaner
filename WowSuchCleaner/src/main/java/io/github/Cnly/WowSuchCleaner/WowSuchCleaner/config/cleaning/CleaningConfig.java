@@ -61,11 +61,6 @@ public class CleaningConfig
         for(String s : tempPreservedItems)
         {
             ItemStack item = null;
-            if(Character.isDigit(s.charAt(0)))
-            {
-                item = ItemUtils.getItemByIdString(s);
-            }
-            else
             {
                 item = ItemUtils.getItemByTypeString(s);
             }

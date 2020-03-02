@@ -7,9 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Map;
 import java.util.Objects;
 
-public class AuctionableItem
-{
-    
+public class AuctionableItem {
+
     protected final ItemStack item;
     protected final float minDurabilityPercent;
     protected final float maxDurabilityPercent;
@@ -21,31 +20,23 @@ public class AuctionableItem
     protected final int auctionDurationInSeconds;
 
     @SuppressWarnings("unchecked")
-    public static AuctionableItem fromMap(Map<?, ?> map)
-    {
-        
-        Map<String, Object> convertedMap = (Map<String, Object>)map;
-        
-        String itemRepresent = (String)convertedMap.get("item");
-        float minDurabilityPercent = ((Integer)convertedMap.get("minDurabilityPercent") / 100.0F);
-        float maxDurabilityPercent = ((Integer)convertedMap.get("maxDurabilityPercent") / 100.0F);
-        double startingPrice = (double)convertedMap.get("startingPrice");
-        double minimumIncrement = (double)convertedMap.get("minimumIncrement");
-        int preserveTimeInSeconds = (int)convertedMap.get("preserveTimeInSeconds");
-        int auctionDurationInSeconds = (int)convertedMap.get("auctionDurationInSeconds");
-        
+    public static AuctionableItem fromMap(Map<?, ?> map) {
+
+        Map<String, Object> convertedMap = (Map<String, Object>) map;
+
+        String itemRepresent = (String) convertedMap.get("item");
+        float minDurabilityPercent = ((Integer) convertedMap.get("minDurabilityPercent") / 100.0F);
+        float maxDurabilityPercent = ((Integer) convertedMap.get("maxDurabilityPercent") / 100.0F);
+        double startingPrice = (double) convertedMap.get("startingPrice");
+        double minimumIncrement = (double) convertedMap.get("minimumIncrement");
+        int preserveTimeInSeconds = (int) convertedMap.get("preserveTimeInSeconds");
+        int auctionDurationInSeconds = (int) convertedMap.get("auctionDurationInSeconds");
+
         ItemStack item = null;
-        if(itemRepresent.equalsIgnoreCase("default"))
-        {
+        if (itemRepresent.equalsIgnoreCase("default")) {
             return new DefaultItem(minDurabilityPercent, maxDurabilityPercent, startingPrice, minimumIncrement, preserveTimeInSeconds, auctionDurationInSeconds);
-        }
-        else
-        {
-            if(Character.isDigit(itemRepresent.charAt(0)))
-            {
-                item = ItemUtils.getItemByIdString(itemRepresent);
-            }
-            else
+        } else {
+
             {
                 item = ItemUtils.getItemByTypeString(itemRepresent);
             }
@@ -57,17 +48,16 @@ public class AuctionableItem
         this.item = item;
         this.minDurabilityPercent = minDurabilityPercent;
         this.maxDurabilityPercent = maxDurabilityPercent;
-        this.minDurability = (short)(item.getType().getMaxDurability() * minDurabilityPercent);
-        this.maxDurability = (short)(item.getType().getMaxDurability() * maxDurabilityPercent);
+        this.minDurability = (short) (item.getType().getMaxDurability() * minDurabilityPercent);
+        this.maxDurability = (short) (item.getType().getMaxDurability() * maxDurabilityPercent);
         this.startingPrice = startingPrice;
         this.minimumIncrement = minimumIncrement;
         this.preserveTimeInSeconds = preserveTimeInSeconds;
         this.auctionDurationInSeconds = auctionDurationInSeconds;
     }
 
-    public boolean isTheSameItem(ItemStack item)
-    {
-        Material type = this.item.getType();
+    public boolean isTheSameItem(ItemStack item) {
+      /*  Material type = this.item.getType();
         if(item.getType() != type) return false;
         if(type.getMaxDurability() == 0)  // duration acting as extra data to indicate material variant
         {
@@ -79,30 +69,28 @@ public class AuctionableItem
             if(!(durability >= this.minDurability && durability <= this.maxDurability)) return false;
         }
         return true;
+
+   */
+        return this.item.isSimilar(item);
     }
-    
-    public ItemStack getItem()
-    {
+
+    public ItemStack getItem() {
         return item;
     }
 
-    public double getStartingPrice()
-    {
+    public double getStartingPrice() {
         return startingPrice;
     }
 
-    public double getMinimumIncrement()
-    {
+    public double getMinimumIncrement() {
         return minimumIncrement;
     }
 
-    public int getPreserveTimeInSeconds()
-    {
+    public int getPreserveTimeInSeconds() {
         return preserveTimeInSeconds;
     }
 
-    public int getAuctionDurationInSeconds()
-    {
+    public int getAuctionDurationInSeconds() {
         return auctionDurationInSeconds;
     }
 

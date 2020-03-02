@@ -28,22 +28,20 @@ import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.Main;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.Lot;
 
-public class LotOperationMenu extends ChestMenu
-{
-    
+public class LotOperationMenu extends ChestMenu {
+
     private static HashMap<Player, LotOperationMenu> opened = new HashMap<>();
-    
+
     private Main main = Main.getInstance();
     private AuctionDataManager auctionDataManager = main.getAuctionDataManager();
     private ILocaleManager localeManager;
-    
+
     private LotShowcase parent;
     private Player player;
     private Lot lot;
     private int previousPage;
-    
-    public LotOperationMenu(ILocaleManager localeManager, Lot lot, LotShowcase parent, Player player, int previousPage)
-    {
+
+    public LotOperationMenu(ILocaleManager localeManager, Lot lot, LotShowcase parent, Player player, int previousPage) {
         super(localeManager.getLocalizedString("ui.lotOperationMenu"), parent, ChestSize.ONE_LINE);
         this.localeManager = localeManager;
         this.parent = parent;
@@ -51,282 +49,246 @@ public class LotOperationMenu extends ChestMenu
         this.lot = lot;
         this.previousPage = previousPage;
     }
-    
+
     @Override
-    public ChestMenu openFor(Player p)
-    {
+    public ChestMenu openFor(Player p) {
         ChestMenu result = super.openFor(p);
         opened.put(p, this);
         return result;
     }
-    
+
     @Override
-    public BusyMenu applyOn(Player p, Inventory inv)
-    {
-        
-        if(!auctionDataManager.hasLot(lot))
-        {
+    public BusyMenu applyOn(Player p, Inventory inv) {
+
+        if (!auctionDataManager.hasLot(lot)) {
             player.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
             openParentShowcase();
             return this;
         }
-        
+
         this.setItem(0, new LotItem());
-        
+
         int index = 2;
-        
-        if(p.hasPermission("WowSuchCleaner.lotOperationMenu.forcePurchase"))
-        {
+
+        if (p.hasPermission("WowSuchCleaner.lotOperationMenu.forcePurchase")) {
             this.setItem(index++, new ForcePurchaseButton());
         }
-        
-        if(p.hasPermission("WowSuchCleaner.lotOperationMenu.removeLot"))
-        {
+
+        if (p.hasPermission("WowSuchCleaner.lotOperationMenu.removeLot")) {
             this.setItem(index, new RemoveLotButton());
         }
-        
+
         this.setItem(8, new BackItem());
-        
+
         return super.applyOn(p, inv);
     }
 
     @Override
-    public void onMenuClose(InventoryCloseEvent e)
-    {
+    public void onMenuClose(InventoryCloseEvent e) {
         opened.remove(e.getPlayer());
         super.onMenuClose(e);
     }
-    
+
     @Override
-    public void onMenuClick(InventoryClickEvent e)
-    {
-        
-        Player p = (Player)e.getWhoClicked();
-        
+    public void onMenuClick(InventoryClickEvent e) {
+
+        Player p = (Player) e.getWhoClicked();
+
         int rawSlot = e.getRawSlot();
-        if(rawSlot < 0 || rawSlot >= this.size)
+        if (rawSlot < 0 || rawSlot >= this.size)
             return;
-        
+
         // MODIFICATION START
-        if(e.getClick() == ClickType.DROP)
-        {
+        if (e.getClick() == ClickType.DROP) {
             reloadFor(p);
             return;
         }
         // MODIFICATION END
-        
+
         BusyItem bi = this.items[rawSlot];
-        if(null == bi)
+        if (null == bi)
             return;
         ItemClickEvent ice = new ItemClickEvent(p, this, e.getClick(),
                 e.getHotbarButton());
         bi.onClick(ice);
-        
-        if(ice.willCloseDirectly())
-        {
+
+        if (ice.willCloseDirectly()) {
             // The following is a magic
-            if(rawSlot <= 44)
+            if (rawSlot <= 44)
                 p.closeInventory();
             else
                 this.closeInventorySafely(p);
             return;
         }
-        
-        if(ice.willOpenParent())
-        {
+
+        if (ice.willOpenParent()) {
             IOpenable parentMenu = this.openParentFor(p);
-            if(null == parentMenu && ice.willCloseOnNoParent())
+            if (null == parentMenu && ice.willCloseOnNoParent())
                 // The following is a magic
-                if(rawSlot <= 44)
+                if (rawSlot <= 44)
                     p.closeInventory();
                 else
                     this.closeInventorySafely(p);
             return;
         }
-        
-        if(ice.willReloadMenu())
-        {
+
+        if (ice.willReloadMenu()) {
             reloadFor(p);
             return;
         }
-        
+
     }
-    
-    public static void updateAll()
-    {
-        for(Entry<Player, LotOperationMenu> e : opened.entrySet())
-        {
+
+    public static void updateAll() {
+        for (Entry<Player, LotOperationMenu> e : opened.entrySet()) {
             e.getValue().updateFor(e.getKey());
         }
     }
-    
-    public static Collection<Player> closeAll()
-    {
-        
+
+    public static Collection<Player> closeAll() {
+
         Collection<Player> result = new HashSet<Player>(opened.keySet());
-        
-        for(Player p : result)
-        {
+
+        for (Player p : result) {
             p.closeInventory();
         }
-        
+
         opened.clear();
-        
+
         return result;
     }
 
-    private void openParentShowcase()
-    {
-        Bukkit.getScheduler().runTask(main, new Runnable(){
+    private void openParentShowcase() {
+        Bukkit.getScheduler().runTask(main, new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 parent.openFor(player, previousPage);
             }
         });
     }
-    
-    private class BackItem extends BusyItem
-    {
-        
-        public BackItem()
-        {
+
+    private class BackItem extends BusyItem {
+
+        public BackItem() {
             super(localeManager.getLocalizedString("ui.back"), new ItemStack(Material.LADDER));
         }
 
         @Override
-        public void onClick(ItemClickEvent e)
-        {
+        public void onClick(ItemClickEvent e) {
             openParentShowcase();
         }
-        
-    }
-    
-    private class RemoveLotButton extends BusyItem
-    {
 
-        public RemoveLotButton()
-        {
+    }
+
+    private class RemoveLotButton extends BusyItem {
+
+        public RemoveLotButton() {
             // Red wool
             super(localeManager.getLocalizedString("ui.removeLot"),
-                    new ItemStack(Material.WOOL, 1, (short)14),
+                    new ItemStack(Material.RED_WOOL, 1),
                     localeManager.getLocalizedString("ui.removeLotLore"),
                     localeManager.getLocalizedString("ui.removeLotLore2"));
         }
 
         @Override
-        public void onClick(ItemClickEvent e)
-        {
-            
-            if(e.getClickType() != ClickType.SHIFT_LEFT)
-            { // Move the item to inventory
-                
-                if(player.getInventory().firstEmpty() == -1)
-                {
+        public void onClick(ItemClickEvent e) {
+
+            if (e.getClickType() != ClickType.SHIFT_LEFT) { // Move the item to inventory
+
+                if (player.getInventory().firstEmpty() == -1) {
                     player.sendMessage(localeManager.getLocalizedString("ui.fullInventory"));
                     return;
                 }
-                
+
                 player.getInventory().addItem(lot.getItem());
-                
+
             }
-            
+
             auctionDataManager.returnDeposit(lot);
             auctionDataManager.removeLot(lot);
             openParentShowcase();
-            
-        }
-        
-    }
-    
-    private class ForcePurchaseButton extends BusyItem
-    {
 
-        public ForcePurchaseButton()
-        {
+        }
+
+    }
+
+    private class ForcePurchaseButton extends BusyItem {
+
+        public ForcePurchaseButton() {
             // Orange wool
-            super(localeManager.getLocalizedString("ui.forcePurchase"), new ItemStack(Material.WOOL, 1, (short)1), localeManager.getLocalizedString("ui.forcePurchaseLore"));
+            super(localeManager.getLocalizedString("ui.forcePurchase"), new ItemStack(Material.ORANGE_WOOL, 1), localeManager.getLocalizedString("ui.forcePurchaseLore"));
         }
 
         @Override
-        public void onClick(ItemClickEvent e)
-        {
-            
-            if(player.getInventory().firstEmpty() == -1 && !auctionDataManager.isVaultAvailable(player))
-            {
+        public void onClick(ItemClickEvent e) {
+
+            if (player.getInventory().firstEmpty() == -1 && !auctionDataManager.isVaultAvailable(player)) {
                 player.sendMessage(localeManager.getLocalizedString("ui.fullInventory"));
                 player.sendMessage(localeManager.getLocalizedString("ui.fullVault"));
                 return;
             }
-            
-            if(!auctionDataManager.hasBidBefore(player, lot))
-            {
+
+            if (!auctionDataManager.hasBidBefore(player, lot)) {
                 EconomyResponse er = Main.economy.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), lot.getPrice());
-                
-                if(!er.transactionSuccess())
-                {
+
+                if (!er.transactionSuccess()) {
                     player.sendMessage(localeManager.getLocalizedString("ui.balanceNotEnough")
                             .replace("{balance}", String.valueOf(er.balance))
                             .replace("{currency}", Main.economy.currencyNamePlural()));
                     return;
                 }
             }
-            
+
             auctionDataManager.bid(player, true, lot, 0);
             auctionDataManager.hammer(lot);
             openParentShowcase();
-            
+
         }
-        
+
     }
-    
-    private class LotItem extends BusyItem
-    {
-        
-        public LotItem()
-        {
+
+    private class LotItem extends BusyItem {
+
+        public LotItem() {
             super(lot.getItem());
-            
+
             List<String> lore = new ArrayList<String>(this.getLores());
-            
-            if(lot.isStarted())
-            {
-                
+
+            if (lot.isStarted()) {
+
                 lore.add(localeManager.getLocalizedString("ui.currentPrice")
                         .replace("{price}", String.format("%.2f", lot.getPrice()))
                         .replace("{currency}", Main.economy.currencyNamePlural()));
-                
+
                 lore.add(localeManager.getLocalizedString("ui.timeRemaining")
                         .replace("{time}", String.valueOf((lot.getAuctionDurationExpire() - System.currentTimeMillis()) / 1000)));
-                
+
                 lore.add(localeManager.getLocalizedString("ui.lastBid")
                         .replace("{player}", lot.getLastBidPlayerName())
                         .replace("{price}", String.format("%.2f", lot.getLastBidPrice()))
                         .replace("{currency}", Main.economy.currencyNamePlural()));
-                
-            }
-            else
-            {
-                
+
+            } else {
+
                 lore.add(localeManager.getLocalizedString("ui.bidUnstarted"));
-                
+
                 lore.add(localeManager.getLocalizedString("ui.currentPrice")
                         .replace("{price}", String.format("%.2f", lot.getPrice()))
                         .replace("{currency}", Main.economy.currencyNamePlural()));
-                
+
                 lore.add(localeManager.getLocalizedString("ui.timeRemaining")
                         .replace("{time}", String.valueOf((lot.getPreserveTimeExpire() - System.currentTimeMillis()) / 1000)));
-                
+
             }
-            
+
             lore.add(localeManager.getLocalizedString("ui.minimumIncrement")
                     .replace("{price}", String.valueOf(lot.getMinimumIncrement()))
                     .replace("{currency}", Main.economy.currencyNamePlural()));
-            
+
             this.setLores(lore);
-            
+
         }
-        
+
     }
-    
+
 }
