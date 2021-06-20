@@ -8,6 +8,7 @@ import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.config.SharedConfigManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.AuctionDataManager;
 import io.github.Cnly.WowSuchCleaner.WowSuchCleaner.data.auction.Lot;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,95 +48,84 @@ public class BidHandler implements Listener
         Lot lot = arg.getLot();
         
         e.setCancelled(true);
-    
-        if(!auctionDataManager.hasLot(lot))
-        {
-            if(lot.isStarted())
-            {
-                p.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
+
+        Bukkit.getScheduler().runTask(main, () -> {
+            if (!auctionDataManager.hasLot(lot)) {
+                if (lot.isStarted()) {
+                    p.sendMessage(localeManager.getLocalizedString("ui.itemAlreadySold"));
+                    cancelBidRequest(p);
+                    return;
+                } else {
+                    p.sendMessage(localeManager.getLocalizedString("ui.itemNoLongerAvailable"));
+                    cancelBidRequest(p);
+                    return;
+                }
+            }
+
+            boolean anonymous = false;
+            String msg = ChatColor.stripColor(e.getMessage());
+
+            if (msg.length() == 0) return;
+            if (msg.equalsIgnoreCase("cancel")) {
                 cancelBidRequest(p);
                 return;
             }
-            else
-            {
-                p.sendMessage(localeManager.getLocalizedString("ui.itemNoLongerAvailable"));
-                cancelBidRequest(p);
+            if (msg.startsWith("a")) {
+                anonymous = true;
+                msg = msg.substring(1);
+            }
+
+            double bid = 0;
+            try {
+                bid = Double.parseDouble(msg);
+            } catch (Exception ex) {
+                p.sendMessage(localeManager.getLocalizedString("ui.wrongBidFormat"));
+                p.sendMessage(localeManager.getLocalizedString("ui.bidPrompt"));
                 return;
             }
-        }
-        
-        boolean anonymous = false;
-        String msg = ChatColor.stripColor(e.getMessage());
-    
-        if(msg.length() == 0) return;
-        if(msg.equalsIgnoreCase("cancel"))
-        {
-            cancelBidRequest(p);
-            return;
-        }
-        if(msg.startsWith("a"))
-        {
-            anonymous = true;
-            msg = msg.substring(1);
-        }
-        
-        double bid = 0;
-        try
-        {
-            bid = Double.parseDouble(msg);
-        }
-        catch(Exception ex)
-        {
-            p.sendMessage(localeManager.getLocalizedString("ui.wrongBidFormat"));
-            p.sendMessage(localeManager.getLocalizedString("ui.bidPrompt"));
-            return;
-        }
-        
-        if(bid < lot.getMinimumIncrement())
-        {
-            p.sendMessage(localeManager.getLocalizedString("ui.bidTooLow")
-                    .replace("{minimumIncrement}", String.valueOf(lot.getMinimumIncrement()))
+
+            if (bid < lot.getMinimumIncrement()) {
+                p.sendMessage(localeManager.getLocalizedString("ui.bidTooLow")
+                        .replace("{minimumIncrement}", String.valueOf(lot.getMinimumIncrement()))
+                        .replace("{currency}", Main.economy.currencyNamePlural()));
+                return;
+            }
+
+            double charge = bid * (sharedConfigManager.getChargePercentPerBid() / 100);
+            if (charge < sharedConfigManager.getMinimumChargePerBid())
+                charge = sharedConfigManager.getMinimumChargePerBid();
+
+            EconomyResponse er = null;
+            if (auctionDataManager.hasBidBefore(p, lot)) {
+                er = Main.economy.withdrawPlayer(p, bid + charge);
+            } else {
+                er = Main.economy.withdrawPlayer(p, lot.getPrice() + bid + charge);
+            }
+
+            if (!er.transactionSuccess()) {
+                p.sendMessage(localeManager.getLocalizedString("ui.balanceNotEnough")
+                        .replace("{balance}", String.valueOf(er.balance))
+                        .replace("{currency}", Main.economy.currencyNamePlural()));
+                p.sendMessage(localeManager.getLocalizedString("ui.chargePerBid")
+                        .replace("{chargePercent}", String.valueOf(sharedConfigManager.getChargePercentPerBid()))
+                        .replace("{minimumCharge}", String.valueOf(sharedConfigManager.getMinimumChargePerBid()))
+                        .replace("{currency}", Main.economy.currencyNamePlural()));
+                return;
+            }
+
+            auctionDataManager.addToTransferAccount(charge);
+            auctionDataManager.bid(p, anonymous, lot, bid);
+            auctionDataManager.setLastBid(p, lot, System.currentTimeMillis());
+
+            callback.onBidSuccess(p, bid, anonymous);
+            biddingPlayers.remove(uuid);
+
+            p.sendMessage(localeManager.getLocalizedString("ui.sucessfulBid")
+                    .replace("{price}", String.valueOf(bid))
+                    .replace("{charge}", String.valueOf(charge))
                     .replace("{currency}", Main.economy.currencyNamePlural()));
-            return;
-        }
-        
-        double charge = bid * (sharedConfigManager.getChargePercentPerBid() / 100);
-        if(charge < sharedConfigManager.getMinimumChargePerBid()) charge = sharedConfigManager.getMinimumChargePerBid();
-        
-        EconomyResponse er = null;
-        if(auctionDataManager.hasBidBefore(p, lot))
-        {
-            er = Main.economy.withdrawPlayer(p, bid + charge);
-        }
-        else
-        {
-            er = Main.economy.withdrawPlayer(p, lot.getPrice() + bid + charge);
-        }
-        
-        if(!er.transactionSuccess())
-        {
-            p.sendMessage(localeManager.getLocalizedString("ui.balanceNotEnough")
-                    .replace("{balance}", String.valueOf(er.balance))
-                    .replace("{currency}", Main.economy.currencyNamePlural()));
-            p.sendMessage(localeManager.getLocalizedString("ui.chargePerBid")
-                    .replace("{chargePercent}", String.valueOf(sharedConfigManager.getChargePercentPerBid()))
-                    .replace("{minimumCharge}", String.valueOf(sharedConfigManager.getMinimumChargePerBid()))
-                    .replace("{currency}", Main.economy.currencyNamePlural()));
-            return;
-        }
-        
-        auctionDataManager.addToTransferAccount(charge);
-        auctionDataManager.bid(p, anonymous, lot, bid);
-        auctionDataManager.setLastBid(p, lot, System.currentTimeMillis());
-        
-        callback.onBidSuccess(p, bid, anonymous);
-        biddingPlayers.remove(uuid);
-        
-        p.sendMessage(localeManager.getLocalizedString("ui.sucessfulBid")
-                .replace("{price}", String.valueOf(bid))
-                .replace("{charge}", String.valueOf(charge))
-                .replace("{currency}", Main.economy.currencyNamePlural()));
-        
+
+        });
     }
     
     @EventHandler

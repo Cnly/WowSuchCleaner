@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.Cnly.WowSuchCleaner</groupId>
     <artifactId>WowSuchCleaner</artifactId>
-    <version>1.9.1</version>
+    <version>1.9.2</version>
 
     <properties>
         <bukkit.version>1.8.6-R0.1-SNAPSHOT</bukkit.version>
         <crafter.version>1.5.0-SNAPSHOT</crafter.version>
         <busyinv.version>1.0.5</busyinv.version>
-        <vault.version>1.5</vault.version>
+        <vault.version>1.7</vault.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -21,7 +21,7 @@
         </repository>
         <repository>
             <id>vaultRepo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
@@ -35,7 +35,7 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>net.milkbowl.vault</groupId>
+                <groupId>com.github.MilkBowl</groupId>
                 <artifactId>VaultAPI</artifactId>
                 <version>${vault.version}</version>
                 <scope>provided</scope>
@@ -75,7 +75,7 @@
             <artifactId>BusyInv</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.milkbowl.vault</groupId>
+            <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
         </dependency>
     </dependencies>
@@ -86,8 +86,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>

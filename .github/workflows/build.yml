@@ -1,0 +1,29 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Build dependencies
+        run: |
+          wget https://github.com/Cnly/Crafter/archive/master.zip -O crafter.zip
+          unzip crafter.zip
+          (cd Crafter-master/Crafter && mvn clean install)
+          wget https://github.com/Cnly/BusyInv/archive/master.zip -O busyinv.zip
+          unzip busyinv.zip
+          (cd BusyInv-master && mvn clean install)
+      - name: Build with Maven
+        working-directory: ./WowSuchCleaner
+        run: mvn clean test package
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ./WowSuchCleaner/target/WowSuchCleaner-*.jar
